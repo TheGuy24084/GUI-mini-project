@@ -56,30 +56,7 @@ const navItems = [
 
     <!-- Main Content Area -->
     <main class="flex-1 flex flex-col h-full overflow-hidden relative z-10">
-      
-      <!-- Header -->
-      <header class="h-20 flex items-center justify-between px-8 bg-white/40 backdrop-blur-md border-b border-slate-200/50 hidden md:flex">
-        <h1 class="text-2xl font-bold text-slate-900">Dashboard</h1>
-        
-        <!-- User Profile -->
-        <div class="flex items-center gap-4">
-          <button class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-300 transition-all shadow-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-          </button>
-          <div class="flex items-center gap-3 pl-4 border-l border-slate-200">
-            <div class="flex flex-col items-end">
-              <span class="text-sm font-semibold text-slate-900">Alex Frontend</span>
-              <span class="text-xs text-slate-500">Pro Member</span>
-            </div>
-            <img src="https://i.pravatar.cc/150?img=11" alt="User avatar" class="w-10 h-10 rounded-xl border-2 border-white shadow-md object-cover" />
-          </div>
-        </div>
-      </header>
-
-      <!-- Scrollable Dashboard Content -->
-      <div class="flex-1 overflow-y-auto p-4 md:p-8">
-        <slot></slot>
-      </div>
+      <slot></slot>
     </main>
 
   </div>
