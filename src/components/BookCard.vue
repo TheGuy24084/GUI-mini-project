@@ -1,9 +1,45 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { useBookStore } from '../store/bookStore';
+import { useToast } from '../composables/useToast';
 import type { Book } from '../data/books';
 
 const props = defineProps<{ book: Book }>();
 const store = useBookStore();
+const { showToast } = useToast();
+
+const daysRemaining = computed(() => {
+  if (!props.book.returnBy) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const returnDate = new Date(props.book.returnBy);
+  returnDate.setHours(0, 0, 0, 0);
+  const diffTime = returnDate.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+});
+
+const statusText = computed(() => {
+  if (props.book.isAvailable) return 'Available';
+  if (daysRemaining.value !== null) {
+    if (daysRemaining.value < 0) return 'Overdue';
+    if (daysRemaining.value === 0) return 'Due today';
+    return `Due in ${daysRemaining.value}d`;
+  }
+  return 'Borrowed';
+});
+
+function handleToggle() {
+  const result = store.toggleBookStatus(props.book.id);
+  if (result) {
+    const { action, book } = result;
+    if (action === 'borrowed') {
+      showToast(`Borrowed "${book.title}". Enjoy!`, 'success');
+    } else {
+      showToast(`Returned "${book.title}". Thank you!`, 'success');
+    }
+  }
+}
 </script>
 
 <template>
@@ -35,14 +71,16 @@ const store = useBookStore();
           class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border transition-colors duration-300"
           :class="book.isAvailable
             ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-            : 'bg-amber-50 text-amber-700 border-amber-200'"
+            : (daysRemaining !== null && daysRemaining < 0) 
+              ? 'bg-rose-50 text-rose-700 border-rose-200' 
+              : 'bg-amber-100 text-amber-900 border-amber-200'"
         >
-          {{ book.isAvailable ? 'Available' : 'Borrowed' }}
+          {{ statusText }}
         </span>
 
         <!-- Borrow / Return Button -->
         <button
-          @click.stop="store.toggleBookStatus(book.id)"
+          @click.stop="handleToggle"
           class="text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1"
           :class="book.isAvailable
             ? 'bg-emerald-500 text-white hover:bg-emerald-600 focus:ring-emerald-500'
@@ -55,3 +93,4 @@ const store = useBookStore();
     </div>
   </div>
 </template>
+

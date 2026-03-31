@@ -6,6 +6,8 @@ export interface Book {
   isbn?: string;
   coverImage: string;
   isAvailable: boolean;
+  borrowedAt?: string;
+  returnBy?: string;
 }
 
 export const mockBooks: Book[] = [

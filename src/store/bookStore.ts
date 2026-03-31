@@ -1,10 +1,26 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { mockBooks, type Book } from '../data/books';
+import { useStorage } from '../composables/useStorage';
+
+const STORAGE_KEY = 'library_books';
 
 export const useBookStore = defineStore('book', () => {
-  const books = ref<Book[]>([...mockBooks]);
+  const { load, save } = useStorage<Book[]>(STORAGE_KEY, [...mockBooks]);
+  
+  // Hydrate from LocalStorage or fallback to mock data
+  const books = ref<Book[]>(load());
+
   const searchQuery = ref('');
+
+  // Watch for changes and save to LocalStorage
+  watch(
+    books,
+    (newBooks) => {
+      save(newBooks);
+    },
+    { deep: true }
+  );
 
   const filteredBooks = computed(() => {
     if (!searchQuery.value.trim()) return books.value;
@@ -19,11 +35,28 @@ export const useBookStore = defineStore('book', () => {
     );
   });
 
-  function toggleBookStatus(id: string): void {
-    const book = books.value.find((b) => b.id === id);
-    if (book) {
-      book.isAvailable = !book.isAvailable;
+  function toggleBookStatus(id: string): { action: 'borrowed' | 'returned'; book: Book } | undefined {
+    const bookIndex = books.value.findIndex((b) => b.id === id);
+    if (bookIndex === -1) return undefined;
+
+    const book = books.value[bookIndex];
+    const action = book.isAvailable ? 'borrowed' : 'returned';
+
+    if (action === 'borrowed') {
+      const now = new Date();
+      const returnDate = new Date();
+      returnDate.setDate(now.getDate() + 14);
+
+      book.isAvailable = false;
+      book.borrowedAt = now.toISOString();
+      book.returnBy = returnDate.toISOString();
+    } else {
+      book.isAvailable = true;
+      book.borrowedAt = undefined;
+      book.returnBy = undefined;
     }
+
+    return { action, book };
   }
 
   function addBook(newBook: Book): void {
@@ -38,3 +71,4 @@ export const useBookStore = defineStore('book', () => {
     addBook,
   };
 });
+
