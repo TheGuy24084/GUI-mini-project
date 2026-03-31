@@ -5,8 +5,11 @@ import DashboardHeader from './components/DashboardHeader.vue';
 import BookGrid from './components/BookGrid.vue';
 import BaseModal from './components/BaseModal.vue';
 import AddBookForm from './components/AddBookForm.vue';
+import StatsGrid from './components/StatsGrid.vue';
 import ToastNotification from './components/ToastNotification.vue';
+import { useBookStore } from './store/bookStore';
 
+const store = useBookStore();
 const isAddModalOpen = ref(false);
 </script>
 
@@ -32,7 +35,23 @@ const isAddModalOpen = ref(false);
         </div>
 
         <div class="max-w-7xl mx-auto pb-12">
-          <BookGrid />
+          <!-- Stats Section -->
+          <StatsGrid />
+          
+          <!-- Book Grid with Transition -->
+          <transition 
+            enter-active-class="transform transition duration-500 ease-out" 
+            enter-from-class="opacity-0 translate-y-4" 
+            enter-to-class="opacity-100 translate-y-0"
+            leave-active-class="transform transition duration-300 ease-in"
+            leave-from-class="opacity-100 translate-y-0"
+            leave-to-class="opacity-0 -translate-y-4"
+            mode="out-in"
+          >
+            <div :key="store.selectedCategory || 'all'">
+              <BookGrid />
+            </div>
+          </transition>
         </div>
       </div>
     </div>

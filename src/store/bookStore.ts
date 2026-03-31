@@ -12,28 +12,52 @@ export const useBookStore = defineStore('book', () => {
   const books = ref<Book[]>(load());
 
   const searchQuery = ref('');
+  const selectedCategory = ref<string | null>(null);
 
   // Watch for changes and save to LocalStorage
   watch(
     books,
-    (newBooks) => {
-      save(newBooks);
+    (mBooks) => {
+      save(mBooks);
     },
     { deep: true }
   );
 
-  const filteredBooks = computed(() => {
-    if (!searchQuery.value.trim()) return books.value;
-
-    const lowerQuery = searchQuery.value.toLowerCase();
-
-    return books.value.filter(
-      (book) =>
-        book.title.toLowerCase().includes(lowerQuery) ||
-        book.author.toLowerCase().includes(lowerQuery) ||
-        book.category.toLowerCase().includes(lowerQuery),
-    );
+  const categories = computed(() => {
+    return [...new Set(books.value.map((b) => b.category))].sort();
   });
+
+  const stats = computed(() => {
+    return {
+      total: books.value.length,
+      borrowed: books.value.filter((b) => !b.isAvailable).length,
+      available: books.value.filter((b) => b.isAvailable).length,
+    };
+  });
+
+  const filteredBooks = computed(() => {
+    let result = books.value;
+
+    if (selectedCategory.value) {
+      result = result.filter((book) => book.category === selectedCategory.value);
+    }
+
+    if (searchQuery.value.trim()) {
+      const lowerQuery = searchQuery.value.toLowerCase();
+      result = result.filter(
+        (book) =>
+          book.title.toLowerCase().includes(lowerQuery) ||
+          book.author.toLowerCase().includes(lowerQuery) ||
+          book.category.toLowerCase().includes(lowerQuery),
+      );
+    }
+
+    return result;
+  });
+
+  function setCategory(category: string | null) {
+    selectedCategory.value = category;
+  }
 
   function toggleBookStatus(id: string): { action: 'borrowed' | 'returned'; book: Book } | undefined {
     const bookIndex = books.value.findIndex((b) => b.id === id);
@@ -66,7 +90,11 @@ export const useBookStore = defineStore('book', () => {
   return {
     books,
     searchQuery,
+    selectedCategory,
+    categories,
+    stats,
     filteredBooks,
+    setCategory,
     toggleBookStatus,
     addBook,
   };
