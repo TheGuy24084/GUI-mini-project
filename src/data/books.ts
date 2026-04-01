@@ -8,6 +8,8 @@ export interface Book {
   isAvailable: boolean;
   borrowedAt?: string;
   returnBy?: string;
+  description?: string;
+  tags?: string[];
 }
 
 export const mockBooks: Book[] = [

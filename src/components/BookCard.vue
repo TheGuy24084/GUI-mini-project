@@ -63,7 +63,23 @@ function handleToggle() {
         <h4 class="font-semibold text-slate-900 line-clamp-1 flex-1" :title="book.title">{{ book.title }}</h4>
       </div>
       <p class="text-sm text-slate-500 mb-1 line-clamp-1">{{ book.author }}</p>
-      <span class="text-xs text-slate-400 mb-4">{{ book.category }}</span>
+      <span class="text-xs text-slate-400 mb-2">{{ book.category }}</span>
+
+      <!-- Description Snippet -->
+      <p v-if="book.description" class="text-[11px] text-slate-500 line-clamp-2 italic mb-3 leading-relaxed">
+        {{ book.description }}
+      </p>
+
+      <!-- Tags -->
+      <div v-if="book.tags && book.tags.length > 0" class="flex flex-wrap gap-1 mb-4">
+        <span 
+          v-for="tag in book.tags" 
+          :key="tag"
+          class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 text-[9px] font-bold tracking-tight uppercase"
+        >
+          {{ tag }}
+        </span>
+      </div>
 
       <div class="mt-auto flex items-center justify-between gap-2">
         <!-- Status Badge -->

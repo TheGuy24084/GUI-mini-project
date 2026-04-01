@@ -2,6 +2,8 @@
 import { reactive, ref } from 'vue';
 import { useBookStore } from '../store/bookStore';
 import { useToast } from '../composables/useToast';
+import { aiService } from '../services/aiService';
+import { Sparkles, Loader2 } from 'lucide-vue-next';
 
 const emit = defineEmits<{ close: [] }>();
 
@@ -17,11 +19,14 @@ const form = reactive({
   category: '',
   isbn: '',
   coverUrl: '',
+  description: '',
+  tags: [] as string[],
 });
 
 const errors = reactive<Record<string, string>>({});
 const touched = ref(new Set<string>());
 const isSubmitting = ref(false);
+const isAISummarizing = ref(false);
 
 // ─── Validation ───────────────────────────────────────────────
 const ISBN_REGEX = /^\d{9}[\dX]$|^\d{13}$/;
@@ -61,6 +66,30 @@ function validateAll(): boolean {
   return valid;
 }
 
+// ─── AI Integration ──────────────────────────────────────────
+async function handleGenerateAI() {
+  if (!form.title || !form.author) {
+    showToast('Please enter Title and Author first!', 'error');
+    return;
+  }
+
+  isAISummarizing.value = true;
+  try {
+    const [summary, tags] = await Promise.all([
+      aiService.generateSummary(form.title, form.author),
+      aiService.suggestTags(form.title, form.author, form.category || 'General')
+    ]);
+    
+    form.description = summary;
+    form.tags = tags;
+    showToast('AI magic complete!', 'success');
+  } catch (error) {
+    showToast('AI is resting 😴', 'error');
+  } finally {
+    isAISummarizing.value = false;
+  }
+}
+
 // ─── Submission ───────────────────────────────────────────────
 function handleSubmit() {
   isSubmitting.value = true;
@@ -77,6 +106,8 @@ function handleSubmit() {
     isbn: form.isbn.trim() || undefined,
     coverImage: form.coverUrl.trim() || '',
     isAvailable: true,
+    description: form.description.trim() || undefined,
+    tags: form.tags.length > 0 ? form.tags : undefined,
   });
 
   showToast(`"${form.title.trim()}" was added to your library.`, 'success');
@@ -166,6 +197,43 @@ function hasError(field: string): boolean {
           {{ errors.category }}
         </p>
       </Transition>
+    </div>
+
+    <!-- AI Description -->
+    <div>
+      <div class="flex items-center justify-between mb-1.5">
+        <label for="book-description" class="block text-sm font-medium text-slate-700">
+          Description
+        </label>
+        <button 
+          type="button"
+          @click="handleGenerateAI"
+          :disabled="isAISummarizing || !form.title || !form.author"
+          class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:text-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed group transition-all"
+        >
+          <Loader2 v-if="isAISummarizing" class="w-3 h-3 animate-spin" />
+          <Sparkles v-else class="w-3 h-3 group-hover:scale-110 transition-transform" />
+          {{ isAISummarizing ? 'Generating...' : '✨ Generate AI Summary' }}
+        </button>
+      </div>
+      <textarea
+        id="book-description"
+        v-model="form.description"
+        rows="3"
+        placeholder="A brief summary of the book..."
+        class="w-full px-3.5 py-2.5 rounded-xl text-sm text-slate-900 bg-slate-100 border border-slate-200 transition-all duration-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 focus:bg-white resize-none"
+      ></textarea>
+      
+      <!-- Smart Tags -->
+      <div v-if="form.tags.length > 0" class="mt-2.5 flex flex-wrap gap-1.5">
+        <span 
+          v-for="tag in form.tags" 
+          :key="tag"
+          class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700 border border-emerald-200"
+        >
+          {{ tag }}
+        </span>
+      </div>
     </div>
 
     <!-- ISBN & Cover URL — row -->

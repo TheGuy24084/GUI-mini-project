@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref, computed, watch } from 'vue';
 import { mockBooks, type Book } from '../data/books';
 import { useStorage } from '../composables/useStorage';
+import { aiService } from '../services/aiService';
 
 const STORAGE_KEY = 'library_books';
 
@@ -87,6 +88,30 @@ export const useBookStore = defineStore('book', () => {
     books.value.push(newBook);
   }
 
+  async function generateBookSummary(bookId: string) {
+    const book = books.value.find((b) => b.id === bookId);
+    if (!book) return;
+
+    try {
+      const summary = await aiService.generateSummary(book.title, book.author);
+      book.description = summary;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async function suggestBookTags(bookId: string) {
+    const book = books.value.find((b) => b.id === bookId);
+    if (!book) return;
+
+    try {
+      const tags = await aiService.suggestTags(book.title, book.author, book.category);
+      book.tags = tags;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   return {
     books,
     searchQuery,
@@ -97,6 +122,8 @@ export const useBookStore = defineStore('book', () => {
     setCategory,
     toggleBookStatus,
     addBook,
+    generateBookSummary,
+    suggestBookTags,
   };
 });
 
