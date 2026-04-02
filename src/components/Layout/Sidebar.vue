@@ -6,11 +6,14 @@ import {
   Settings, 
   LogOut, 
   Layers,
-  FilterX
+  FilterX,
+  PieChart
 } from 'lucide-vue-next';
 import { useBookStore } from '../../store/bookStore';
+import { useRoute } from 'vue-router';
 
 const store = useBookStore();
+const route = useRoute();
 
 const categories = computed(() => store.categories);
 const activeCategory = computed(() => store.selectedCategory);
@@ -36,15 +39,25 @@ function selectCategory(category: string | null) {
       <div class="mb-8">
         <p class="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Menu</p>
         <nav class="space-y-1">
-          <a 
-            href="#"
-            @click.prevent="selectCategory(null)"
+          <router-link 
+            to="/"
+            @click="selectCategory(null)"
             class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium group"
-            :class="!activeCategory ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'"
+            :class="route.path === '/' && !activeCategory ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'"
           >
-            <LayoutDashboard :size="20" :class="!activeCategory ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'" />
+            <LayoutDashboard :size="20" :class="route.path === '/' && !activeCategory ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'" />
             Dashboard
-          </a>
+          </router-link>
+          
+          <router-link 
+            to="/analytics"
+            @click="selectCategory(null)"
+            class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium group mt-1"
+            :class="route.path === '/analytics' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'"
+          >
+            <PieChart :size="20" :class="route.path === '/analytics' ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'" />
+            Analytics
+          </router-link>
         </nav>
       </div>
 

@@ -64,6 +64,31 @@ export class GeminiAIService {
       throw new Error('AI is resting');
     }
   }
+
+  /**
+   * Generates a 2-sentence summary of the library's data using Gemini 3 Pro.
+   */
+  async generateAnalyticsSummary(stats: any, categories: string[]): Promise<string> {
+    if (!import.meta.env.VITE_GEMINI_API_KEY) {
+      // Mock for demo
+      return "Most of your collection is distributed across various categories. The availability rate remains high with a few books currently borrowed.";
+    }
+
+    try {
+      const model = this.genAI.getGenerativeModel({ 
+        model: 'gemini-3-pro',
+        systemInstruction: 'You are an expert Data Analyst and Librarian. Provide a concise, maximum 2-sentence summary of the library data.'
+      });
+
+      const prompt = `Library Data Snapshot:\n- Total Books: ${stats.total}\n- Available: ${stats.available}\n- Borrowed: ${stats.borrowed}\n- Categories present: ${categories.join(', ')}\n\nProvide a 2-sentence summary emphasizing the distribution and what it says about the collection.`;
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      return response.text().trim();
+    } catch (error) {
+      console.error('Gemini AI Error (Analytics):', error);
+      throw new Error('AI is resting');
+    }
+  }
 }
 
 // Export a singleton instance using the environment variable

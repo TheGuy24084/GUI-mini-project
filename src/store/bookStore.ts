@@ -88,6 +88,8 @@ export const useBookStore = defineStore('book', () => {
     books.value.push(newBook);
   }
 
+  const analyticsSummary = ref<string>('');
+
   async function generateBookSummary(bookId: string) {
     const book = books.value.find((b) => b.id === bookId);
     if (!book) return;
@@ -112,6 +114,14 @@ export const useBookStore = defineStore('book', () => {
     }
   }
 
+  async function updateAnalyticsSummary() {
+    try {
+      analyticsSummary.value = await aiService.generateAnalyticsSummary(stats.value, categories.value);
+    } catch (error) {
+      console.error('Failed to update analytics summary:', error);
+    }
+  }
+
   return {
     books,
     searchQuery,
@@ -119,11 +129,13 @@ export const useBookStore = defineStore('book', () => {
     categories,
     stats,
     filteredBooks,
+    analyticsSummary,
     setCategory,
     toggleBookStatus,
     addBook,
     generateBookSummary,
     suggestBookTags,
+    updateAnalyticsSummary,
   };
 });
 
