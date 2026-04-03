@@ -26,7 +26,7 @@ function selectCategory(category: string | null) {
 <template>
   <aside class="w-72 flex-shrink-0 flex flex-col justify-between p-6 bg-white/60 backdrop-blur-xl border-r border-slate-200/50 relative z-10 hidden md:flex">
     
-    <div>
+    <div class="flex-1 overflow-y-auto pr-2 no-scrollbar">
       <!-- Brand -->
       <div class="flex items-center gap-3 px-2 mb-10">
         <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/30">
@@ -93,7 +93,7 @@ function selectCategory(category: string | null) {
     </div>
 
     <!-- Bottom Actions -->
-    <div class="space-y-2 pt-6 border-t border-slate-200/50">
+    <div class="space-y-2 pt-6 border-t border-slate-200/50 mt-4 flex-shrink-0">
       <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition-all font-medium group">
         <Settings :size="20" class="text-slate-400 group-hover:text-slate-600" />
         Settings

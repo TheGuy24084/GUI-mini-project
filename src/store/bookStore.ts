@@ -14,6 +14,7 @@ export const useBookStore = defineStore('book', () => {
 
   const searchQuery = ref('');
   const selectedCategory = ref<string | null>(null);
+  const selectedBook = ref<Book | null>(null);
 
   // Watch for changes and save to LocalStorage
   watch(
@@ -122,15 +123,21 @@ export const useBookStore = defineStore('book', () => {
     }
   }
 
+  function selectBook(book: Book | null) {
+    selectedBook.value = book;
+  }
+
   return {
     books,
     searchQuery,
     selectedCategory,
+    selectedBook,
     categories,
     stats,
     filteredBooks,
     analyticsSummary,
     setCategory,
+    selectBook,
     toggleBookStatus,
     addBook,
     generateBookSummary,

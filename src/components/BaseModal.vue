@@ -1,5 +1,6 @@
 <script setup lang="ts">
-defineProps<{
+import { onKeyStroke } from '@vueuse/core';
+const props = defineProps<{
   title: string;
   modelValue: boolean;
 }>();
@@ -11,6 +12,13 @@ const emit = defineEmits<{
 function close() {
   emit('update:modelValue', false);
 }
+
+onKeyStroke('Escape', (e) => {
+  if (props.modelValue) {
+    e.preventDefault();
+    close();
+  }
+});
 </script>
 
 <template>

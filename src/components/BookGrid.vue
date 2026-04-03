@@ -8,15 +8,39 @@ const store = useBookStore();
 
 <template>
   <div class="w-full">
-    <div v-if="store.filteredBooks.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <TransitionGroup 
+      v-if="store.filteredBooks.length > 0" 
+      name="list" 
+      tag="div" 
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 relative"
+    >
       <BookCard
         v-for="book in store.filteredBooks"
         :key="book.id"
         :book="book"
       />
-    </div>
+    </TransitionGroup>
     <div v-else>
       <EmptyState />
     </div>
   </div>
 </template>
+
+<style scoped>
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.list-leave-active {
+  position: absolute;
+  z-index: -1;
+}
+</style>

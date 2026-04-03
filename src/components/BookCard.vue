@@ -8,6 +8,10 @@ const props = defineProps<{ book: Book }>();
 const store = useBookStore();
 const { showToast } = useToast();
 
+function openBookDetail() {
+  store.selectBook(props.book);
+}
+
 const daysRemaining = computed(() => {
   if (!props.book.returnBy) return null;
   const today = new Date();
@@ -43,7 +47,10 @@ function handleToggle() {
 </script>
 
 <template>
-  <div class="group relative flex flex-col bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+  <div 
+    @click="openBookDetail"
+    class="group relative flex flex-col bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-2xl hover:shadow-emerald-500/20 hover:-translate-y-2 transition-all duration-300 cursor-pointer"
+  >
     <!-- Book Cover -->
     <div class="h-48 w-full relative flex items-center justify-center p-6 text-center overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900">
       <img

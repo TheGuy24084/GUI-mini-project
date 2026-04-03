@@ -1,8 +1,26 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue';
 import { Search, Bell } from 'lucide-vue-next';
 import { useBookStore } from '../store/bookStore';
+import { useMagicKeys } from '@vueuse/core';
 
 const store = useBookStore();
+
+const searchInputRef = ref<HTMLInputElement | null>(null);
+const { Meta_K, Ctrl_K } = useMagicKeys({
+  passive: false,
+  onEventFired(e) {
+    if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+    }
+  }
+});
+
+watch([Meta_K, Ctrl_K], ([meta, ctrl]) => {
+  if (meta || ctrl) {
+    searchInputRef.value?.focus();
+  }
+});
 </script>
 
 <template>
@@ -15,9 +33,10 @@ const store = useBookStore();
         <Search class="h-5 w-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
       </div>
       <input
+        ref="searchInputRef"
         v-model="store.searchQuery"
         type="text"
-        placeholder="Search books by title, author, or category..."
+        placeholder="Search books by title, author, or category... (⌘K / Ctrl+K)"
         class="block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl leading-5 bg-white/60 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all duration-300 shadow-sm"
       />
     </div>
