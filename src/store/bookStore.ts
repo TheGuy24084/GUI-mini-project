@@ -76,10 +76,12 @@ export const useBookStore = defineStore('book', () => {
       book.isAvailable = false;
       book.borrowedAt = now.toISOString();
       book.returnBy = returnDate.toISOString();
+      book.borrowerId = 'm1';
     } else {
       book.isAvailable = true;
       book.borrowedAt = undefined;
       book.returnBy = undefined;
+      book.borrowerId = undefined;
     }
 
     return { action, book };

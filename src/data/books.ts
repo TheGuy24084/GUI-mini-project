@@ -10,6 +10,7 @@ export interface Book {
   returnBy?: string;
   description?: string;
   tags?: string[];
+  borrowerId?: string;
 }
 
 export const mockBooks: Book[] = [
@@ -28,6 +29,7 @@ export const mockBooks: Book[] = [
     category: 'Software Engineering',
     coverImage: 'https://covers.openlibrary.org/b/isbn/9780134494166-L.jpg',
     isAvailable: false,
+    borrowerId: 'm1',
   },
   {
     id: '3',
@@ -52,6 +54,7 @@ export const mockBooks: Book[] = [
     category: 'Architecture',
     coverImage: 'https://covers.openlibrary.org/b/isbn/9780321125217-L.jpg',
     isAvailable: false,
+    borrowerId: 'm2',
   },
   {
     id: '6',
@@ -84,6 +87,7 @@ export const mockBooks: Book[] = [
     category: 'Software Engineering',
     coverImage: 'https://covers.openlibrary.org/b/isbn/9780201633610-L.jpg',
     isAvailable: false,
+    borrowerId: 'm1',
   },
   {
     id: '10',

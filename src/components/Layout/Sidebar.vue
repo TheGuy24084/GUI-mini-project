@@ -7,13 +7,20 @@ import {
   LogOut, 
   Layers,
   FilterX,
-  PieChart
+  PieChart,
+  Users
 } from 'lucide-vue-next';
 import { useBookStore } from '../../store/bookStore';
 import { useRoute } from 'vue-router';
+import { useAuthStore } from '../../store/authStore';
 
 const store = useBookStore();
+const authStore = useAuthStore();
 const route = useRoute();
+
+const emit = defineEmits<{
+  (e: 'open-settings'): void
+}>();
 
 const categories = computed(() => store.categories);
 const activeCategory = computed(() => store.selectedCategory);
@@ -58,6 +65,16 @@ function selectCategory(category: string | null) {
             <PieChart :size="20" :class="route.path === '/analytics' ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'" />
             Analytics
           </router-link>
+
+          <router-link 
+            to="/members"
+            @click="selectCategory(null)"
+            class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium group mt-1"
+            :class="route.path === '/members' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'"
+          >
+            <Users :size="20" :class="route.path === '/members' ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'" />
+            Members
+          </router-link>
         </nav>
       </div>
 
@@ -94,14 +111,14 @@ function selectCategory(category: string | null) {
 
     <!-- Bottom Actions -->
     <div class="space-y-2 pt-6 border-t border-slate-200/50 mt-4 flex-shrink-0">
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition-all font-medium group">
+      <button @click="emit('open-settings')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition-all font-medium group">
         <Settings :size="20" class="text-slate-400 group-hover:text-slate-600" />
         Settings
-      </a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-red-50 hover:text-red-600 transition-all font-medium group">
+      </button>
+      <button @click="authStore.logout();" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-red-50 hover:text-red-600 transition-all font-medium group">
         <LogOut :size="20" class="text-slate-400 group-hover:text-red-500 transition-colors" />
         Logout
-      </a>
+      </button>
     </div>
   </aside>
 </template>
