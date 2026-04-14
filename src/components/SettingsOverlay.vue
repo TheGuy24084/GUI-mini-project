@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseModal from './BaseModal.vue';
 import { useAuthStore } from '../store/authStore';
-import { useDark, useToggle } from '@vueuse/core';
+import { useUiStore } from '../store/uiStore';
 
 const emit = defineEmits<{
   (e: 'close'): void;
@@ -12,8 +12,7 @@ const props = defineProps<{
 }>();
 
 const authStore = useAuthStore();
-const isDark = useDark();
-const toggleDark = useToggle(isDark);
+const uiStore = useUiStore();
 
 </script>
 
@@ -28,13 +27,13 @@ const toggleDark = useToggle(isDark);
           <p class="text-slate-500 text-sm">Switch between light and dark themes</p>
         </div>
         <button 
-          @click="toggleDark()" 
+          @click="uiStore.toggleDark()" 
           class="w-12 h-6 rounded-full transition-colors relative"
-          :class="isDark ? 'bg-emerald-500' : 'bg-slate-300'"
+          :class="uiStore.isDark ? 'bg-emerald-500' : 'bg-slate-300'"
         >
           <span 
             class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform"
-            :class="isDark ? 'translate-x-6' : 'translate-x-0'"
+            :class="uiStore.isDark ? 'translate-x-6' : 'translate-x-0'"
           ></span>
         </button>
       </div>

@@ -34,12 +34,12 @@ function handleLogin() {
 
       <form @submit.prevent="handleLogin" class="space-y-5">
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-1.5" for="username">Username</label>
+          <label class="block text-sm font-medium text-slate-300 mb-1.5" for="email">Email</label>
           <input 
-            id="username"
+            id="email"
             v-model="username" 
-            type="text" 
-            placeholder="admin"
+            type="email" 
+            placeholder="admin@library.com"
             class="w-full px-4 py-3 rounded-xl bg-slate-900/50 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all"
             required
           />

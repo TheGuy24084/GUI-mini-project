@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useBookStore } from '../store/bookStore';
+import { useAuthStore } from '../store/authStore';
 import { useToast } from '../composables/useToast';
 import type { Book } from '../data/books';
 
 const props = defineProps<{ book: Book }>();
 const store = useBookStore();
+const authStore = useAuthStore();
 const { showToast } = useToast();
 
 function openBookDetail() {
@@ -103,7 +105,7 @@ function handleToggle() {
 
         <!-- Borrow / Return Button -->
         <button
-          @click.stop="handleToggle"
+          @click.stop="authStore.isAuthenticated ? handleToggle() : (authStore.isAuthModalOpen = true)"
           class="text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1"
           :class="book.isAvailable
             ? 'bg-emerald-500 text-white hover:bg-emerald-600 focus:ring-emerald-500'

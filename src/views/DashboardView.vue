@@ -6,8 +6,10 @@ import BaseModal from '../components/BaseModal.vue';
 import AddBookForm from '../components/AddBookForm.vue';
 import StatsGrid from '../components/StatsGrid.vue';
 import { useBookStore } from '../store/bookStore';
+import { useAuthStore } from '../store/authStore';
 
 const store = useBookStore();
+const authStore = useAuthStore();
 const isAddModalOpen = ref(false);
 </script>
 
@@ -22,6 +24,7 @@ const isAddModalOpen = ref(false);
           <p class="text-slate-500">Discover and manage your book collection.</p>
         </div>
         <button
+          v-if="authStore.isAuthenticated"
           id="open-add-book-modal-btn"
           @click="isAddModalOpen = true"
           class="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 active:scale-[0.97] transition-all shadow-sm shadow-emerald-600/30 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-1"
