@@ -7,7 +7,11 @@ export const useUiStore = defineStore('ui', () => {
   const isDark = useDark();
   const toggleDark = useToggle(isDark);
   
-  const notifications = ref<string[]>([]);
+  const notifications = ref<string[]>([
+    "System Updated: v2.1.0 deployed successfully",
+    "Book Due Soon: 'The Pragmatic Programmer' is due in 2 days",
+    "Welcome to Smart Library OS!"
+  ]);
 
   const { load, save } = useStorage<{
     compactMode: boolean;

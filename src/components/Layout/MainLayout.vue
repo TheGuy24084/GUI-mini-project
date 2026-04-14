@@ -7,7 +7,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="flex h-screen w-full bg-slate-50 overflow-hidden font-sans text-slate-900 relative">
+  <div class="flex h-screen w-full bg-slate-50 dark:bg-[#0f0f0f] overflow-hidden font-sans text-slate-900 dark:text-white relative">
     
     <!-- Background Decoration for Glassmorphism effect -->
     <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>

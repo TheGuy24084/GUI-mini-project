@@ -20,8 +20,8 @@ const isAddModalOpen = ref(false);
       <!-- Page Header Row -->
       <div class="mb-6 max-w-7xl mx-auto flex items-start justify-between gap-4">
         <div>
-          <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">Library Overview</h2>
-          <p class="text-slate-500">Discover and manage your book collection.</p>
+          <h2 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">Library Overview</h2>
+          <p class="text-slate-500 dark:text-[#aaaaaa]">Discover and manage your book collection.</p>
         </div>
         <button
           v-if="authStore.isAuthenticated"

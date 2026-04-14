@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { mockMembers, type Member } from '../data/members';
+import { useAuthStore, type User } from '../store/authStore';
 import { Mail, Calendar } from 'lucide-vue-next';
 import MemberDetailSheet from '../components/MemberDetailSheet.vue';
 
-const selectedMember = ref<Member | null>(null);
+const authStore = useAuthStore();
+const selectedMember = ref<User | null>(null);
 const isSheetOpen = ref(false);
 
-function openMember(member: Member) {
+function openMember(member: User) {
   selectedMember.value = member;
   isSheetOpen.value = true;
 }
@@ -26,10 +27,10 @@ const formatDate = (dateStr: string) => {
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       <div 
-        v-for="member in mockMembers" 
+        v-for="member in authStore.users" 
         :key="member.id"
         @click="openMember(member)"
-        class="bg-white dark:bg-slate-900/50 rounded-2xl p-6 border border-slate-200/60 dark:border-slate-700/50 shadow-sm hover:shadow-md hover:-translate-y-1 hover:border-emerald-200 dark:hover:border-emerald-500/50 transition-all cursor-pointer group"
+        class="bg-white dark:bg-[#1e1e1e] rounded-2xl p-6 border border-slate-200/60 dark:border-[#2a2a2a] shadow-sm hover:shadow-md hover:-translate-y-1 hover:border-emerald-200 dark:hover:border-emerald-500/50 transition-all cursor-pointer group"
       >
         <div class="flex items-center gap-4 mb-4">
           <img :src="member.avatarUrl" class="w-12 h-12 rounded-full border-2 border-emerald-100 dark:border-emerald-900/50" />
@@ -46,7 +47,7 @@ const formatDate = (dateStr: string) => {
           </div>
           <div class="flex items-center gap-2">
             <Calendar :size="14" class="text-slate-400 dark:text-slate-500" />
-            <span>Joined {{ formatDate(member.joinDate) }}</span>
+            <span>Joined {{ formatDate(member.joinDate || new Date().toISOString()) }}</span>
           </div>
         </div>
       </div>

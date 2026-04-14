@@ -53,7 +53,7 @@ function handleToggle() {
 <template>
   <div 
     @click="openBookDetail"
-    class="group relative flex flex-col bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-slate-100 dark:border-slate-700/60 overflow-hidden hover:shadow-2xl hover:shadow-emerald-500/20 dark:hover:shadow-emerald-500/10 hover:-translate-y-2 transition-all duration-300 cursor-pointer"
+    class="group relative flex flex-col bg-white dark:bg-[#1e1e1e] rounded-2xl shadow-sm dark:shadow-black/50 border border-slate-100 dark:border-[#2a2a2a] overflow-hidden hover:shadow-2xl hover:shadow-emerald-500/20 dark:hover:shadow-emerald-500/10 hover:-translate-y-2 transition-all duration-300 cursor-pointer"
   >
     <!-- Book Cover -->
     <div 
@@ -73,14 +73,14 @@ function handleToggle() {
 
     <!-- Content -->
     <div 
-      class="flex flex-col flex-1 bg-white dark:bg-slate-800 transition-all duration-300"
+      class="flex flex-col flex-1 bg-white dark:bg-[#1e1e1e] transition-all duration-300"
       :class="uiStore.compactMode ? 'p-3' : 'p-5'"
     >
       <div class="flex justify-between items-start mb-1 gap-2">
-        <h4 class="font-semibold text-slate-900 dark:text-slate-100 line-clamp-1 flex-1" :title="book.title">{{ book.title }}</h4>
+        <h4 class="font-semibold text-slate-900 dark:text-white line-clamp-1 flex-1" :title="book.title">{{ book.title }}</h4>
       </div>
-      <p class="text-sm text-slate-500 mb-1 line-clamp-1">{{ book.author }}</p>
-      <span class="text-xs text-slate-400 mb-2">{{ book.category }}</span>
+      <p class="text-sm text-slate-500 dark:text-[#aaaaaa] mb-1 line-clamp-1">{{ book.author }}</p>
+      <span class="text-xs text-slate-400 dark:text-[#aaaaaa] opacity-80 mb-2">{{ book.category }}</span>
 
       <!-- Description Snippet -->
       <Transition
@@ -101,7 +101,7 @@ function handleToggle() {
         <span 
           v-for="tag in book.tags" 
           :key="tag"
-          class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 text-[9px] font-bold tracking-tight uppercase"
+          class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-[#2a2a2a] text-slate-500 dark:text-[#aaaaaa] text-[9px] font-bold tracking-tight uppercase"
         >
           {{ tag }}
         </span>

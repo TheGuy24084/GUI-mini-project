@@ -29,8 +29,8 @@ watch([Meta_K, Ctrl_K], ([meta, ctrl]) => {
 </script>
 
 <template>
-  <header class="h-20 flex-shrink-0 flex items-center justify-between px-4 md:px-8 bg-white/40 backdrop-blur-xl border-b border-slate-200/50 sticky top-0 z-20">
-    <h1 class="text-2xl font-bold text-slate-900 hidden lg:block">Dashboard</h1>
+  <header class="h-20 flex-shrink-0 flex items-center justify-between px-4 md:px-8 bg-white/40 dark:bg-[#1e1e1e]/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-[#2a2a2a] sticky top-0 z-20">
+    <h1 class="text-2xl font-bold text-slate-900 dark:text-white hidden lg:block">Dashboard</h1>
 
     <!-- Search Bar -->
     <div class="flex-1 max-w-xl mx-4 lg:mx-8 relative group">
@@ -41,8 +41,7 @@ watch([Meta_K, Ctrl_K], ([meta, ctrl]) => {
         ref="searchInputRef"
         v-model="store.searchQuery"
         type="text"
-        placeholder="Search books by title, author, or category... (⌘K / Ctrl+K)"
-        class="block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl leading-5 bg-white/60 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all duration-300 shadow-sm"
+        class="block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-[#2a2a2a] rounded-xl leading-5 bg-white/60 dark:bg-[#0f0f0f] dark:text-[#aaaaaa] placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:bg-white dark:focus:bg-[#0f0f0f] focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all duration-300 shadow-sm"
       />
     </div>
 
@@ -51,33 +50,33 @@ watch([Meta_K, Ctrl_K], ([meta, ctrl]) => {
       <div class="relative">
         <button 
           @click="isNotificationsOpen = !isNotificationsOpen"
-          class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-300 transition-all shadow-sm relative focus:outline-none"
+          class="flex items-center justify-center w-10 h-10 rounded-xl bg-white dark:bg-[#1e1e1e] border border-slate-200 dark:border-[#2a2a2a] text-slate-500 dark:text-[#aaaaaa] hover:text-slate-900 hover:border-slate-300 dark:hover:bg-[#2a2a2a] transition-all shadow-sm relative focus:outline-none"
         >
           <Bell class="h-5 w-5" />
-          <span v-if="uiStore.notifications.length > 0" class="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border border-rose-100"></span>
+          <span v-if="uiStore.notifications.length > 0" class="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 dark:bg-rose-400 rounded-full border border-rose-100 dark:border-[#1e1e1e]"></span>
         </button>
         <!-- Notification Dropdown -->
-        <div v-if="isNotificationsOpen" class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-slate-100 p-2 z-50">
-          <div class="px-3 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-50 mb-1">Alerts</div>
+        <div v-if="isNotificationsOpen" class="absolute right-0 mt-2 w-64 bg-white dark:bg-[#1e1e1e] rounded-xl shadow-lg border border-slate-100 dark:border-[#2a2a2a] p-2 z-50">
+          <div class="px-3 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-50 dark:border-[#2a2a2a] mb-1">Alerts</div>
           <div class="max-h-48 overflow-y-auto">
-            <div v-if="uiStore.notifications.length === 0" class="px-3 py-4 text-sm text-slate-500 text-center italic">
+            <div v-if="uiStore.notifications.length === 0" class="px-3 py-4 text-sm text-slate-500 dark:text-slate-400 text-center italic">
               No new alerts
             </div>
-            <div v-for="note in uiStore.notifications" :key="note" class="px-3 py-2 hover:bg-slate-50 rounded-lg text-sm text-slate-700 transition-colors">
+            <div v-for="note in uiStore.notifications" :key="note" class="px-3 py-2 hover:bg-slate-50 dark:hover:bg-[#2a2a2a] rounded-lg text-sm text-slate-700 dark:text-[#aaaaaa] transition-colors">
               {{ note }}
             </div>
           </div>
         </div>
       </div>
-      <div class="hidden md:flex items-center gap-3 pl-4 border-l border-slate-200">
+      <div class="hidden md:flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-[#2a2a2a]">
         <div class="flex flex-col items-end">
-          <span class="text-sm font-semibold text-slate-900">{{ authStore.isAuthenticated ? authStore.user?.name : 'Guest' }}</span>
-          <span class="text-xs text-slate-500">{{ authStore.isAuthenticated ? 'Member' : 'Public Access' }}</span>
+          <span class="text-sm font-semibold text-slate-900 dark:text-white">{{ authStore.isAuthenticated ? authStore.user?.name : 'Guest' }}</span>
+          <span class="text-xs text-slate-500 dark:text-[#aaaaaa]">{{ authStore.isAuthenticated ? 'Member' : 'Public Access' }}</span>
         </div>
-        <img :src="`https://ui-avatars.com/api/?name=${authStore.isAuthenticated ? authStore.user?.name : 'Guest'}&background=10b981&color=fff`" alt="User avatar" class="w-10 h-10 rounded-xl border-2 border-white shadow-md object-cover" />
+        <img :src="`https://ui-avatars.com/api/?name=${authStore.isAuthenticated ? authStore.user?.name : 'Guest'}&background=10b981&color=fff`" alt="User avatar" class="w-10 h-10 rounded-xl border-2 border-white dark:border-[#2a2a2a] shadow-md object-cover" />
       </div>
       <!-- Mobile Profile Avatar -->
-      <img :src="`https://ui-avatars.com/api/?name=${authStore.isAuthenticated ? authStore.user?.name : 'Guest'}&background=10b981&color=fff`" alt="User avatar" class="w-10 h-10 rounded-xl border-2 border-white shadow-md object-cover md:hidden" />
+      <img :src="`https://ui-avatars.com/api/?name=${authStore.isAuthenticated ? authStore.user?.name : 'Guest'}&background=10b981&color=fff`" alt="User avatar" class="w-10 h-10 rounded-xl border-2 border-white dark:border-[#2a2a2a] shadow-md object-cover md:hidden" />
     </div>
   </header>
 </template>

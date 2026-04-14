@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { X, BookOpen, Clock } from 'lucide-vue-next';
-import { type Member } from '../data/members';
+import { type User } from '../store/authStore';
 import { useBookStore } from '../store/bookStore';
 
 const props = defineProps<{
   isOpen: boolean;
-  member: Member;
+  member: User;
 }>();
 
 const emit = defineEmits<{
@@ -44,11 +44,11 @@ const getDaysUntilDue = (returnDateStr?: string) => {
 
     <!-- Slide-over panel -->
     <div 
-      class="fixed inset-y-0 right-0 z-[70] w-full max-w-md max-h-screen bg-white dark:bg-slate-950 shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out border-l border-slate-200 dark:border-slate-800"
+      class="fixed inset-y-0 right-0 z-[70] w-full max-w-md max-h-screen bg-white dark:bg-[#1e1e1e] shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out border-l border-slate-200 dark:border-[#2a2a2a]"
       :class="isOpen ? 'translate-x-0' : 'translate-x-full'"
     >
-      <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800/50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md">
-        <h2 class="text-lg font-bold text-slate-800 dark:text-slate-100">Member Detail</h2>
+      <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-[#2a2a2a] bg-white/80 dark:bg-[#1e1e1e]/80 backdrop-blur-md">
+        <h2 class="text-lg font-bold text-slate-800 dark:text-white">Member Detail</h2>
         <button 
           @click="emit('close')"
           class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
@@ -72,20 +72,20 @@ const getDaysUntilDue = (returnDateStr?: string) => {
           <div>
             <h4 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Currently Borrowed</h4>
             
-            <div v-if="borrowedBooks.length === 0" class="text-center py-6 bg-slate-50 dark:bg-slate-900/40 rounded-xl border border-dashed border-slate-200 dark:border-slate-800">
-              <p class="text-slate-500 dark:text-slate-400 text-sm">No books currently borrowed.</p>
+            <div v-if="borrowedBooks.length === 0" class="text-center py-6 bg-slate-50 dark:bg-[#0f0f0f] rounded-xl border border-dashed border-slate-200 dark:border-[#2a2a2a]">
+              <p class="text-slate-500 dark:text-[#aaaaaa] text-sm">No books currently borrowed.</p>
             </div>
 
             <div v-else class="space-y-4">
               <div 
                 v-for="book in borrowedBooks" 
                 :key="book.id"
-                class="flex gap-4 p-4 rounded-xl border border-slate-100 dark:border-slate-800/50 bg-white dark:bg-slate-900 shadow-sm"
+                class="flex gap-4 p-4 rounded-xl border border-slate-100 dark:border-[#2a2a2a] bg-white dark:bg-[#0f0f0f] shadow-sm"
               >
                 <img :src="book.coverImage" :alt="book.title" class="w-12 h-16 object-cover rounded shadow-sm flex-shrink-0" />
                 <div class="min-w-0 flex-1">
-                  <h5 class="font-bold text-slate-800 dark:text-slate-100 truncate">{{ book.title }}</h5>
-                  <p class="text-xs text-slate-500 dark:text-slate-400 mb-2 truncate">{{ book.author }}</p>
+                  <h5 class="font-bold text-slate-800 dark:text-white truncate">{{ book.title }}</h5>
+                  <p class="text-xs text-slate-500 dark:text-[#aaaaaa] mb-2 truncate">{{ book.author }}</p>
                   
                   <div class="flex items-center gap-1 text-[11px] font-medium" :class="getDaysUntilDue(book.returnBy) < 3 ? 'text-red-500 dark:text-red-400' : 'text-slate-500 dark:text-slate-400'">
                     <Clock :size="12" />

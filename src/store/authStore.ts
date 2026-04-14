@@ -8,6 +8,9 @@ export interface User {
   email: string;
   password?: string;
   name: string;
+  id?: string;
+  joinDate?: string;
+  avatarUrl?: string;
 }
 
 export const useAuthStore = defineStore('auth', () => {
@@ -19,15 +22,15 @@ export const useAuthStore = defineStore('auth', () => {
     aiAutoGenerate: boolean;
   }>('library_auth', {
     user: null,
-    users: [{ email: 'admin@library.com', password: 'password', name: 'Admin User' }],
+    users: [{ id: 'admin-1', email: 'admin@library.com', password: 'password', name: 'Admin User', joinDate: new Date().toISOString(), avatarUrl: `https://ui-avatars.com/api/?name=Admin+User&background=10b981&color=fff` }],
     emailNotifications: true,
     aiAutoGenerate: true
   });
   
   const initialState = load();
 
-  const user = ref<User | null>(initialState.user || (initialState.isAuthenticated ? { email: 'admin@library.com', name: 'Admin User' } : null));
-  const users = ref<User[]>(initialState.users || [{ email: 'admin@library.com', password: 'password', name: 'Admin User' }]);
+  const user = ref<User | null>(initialState.user || (initialState.isAuthenticated ? { id: 'admin-1', email: 'admin@library.com', name: 'Admin User', joinDate: new Date().toISOString(), avatarUrl: `https://ui-avatars.com/api/?name=Admin+User&background=10b981&color=fff` } : null));
+  const users = ref<User[]>(initialState.users || [{ id: 'admin-1', email: 'admin@library.com', password: 'password', name: 'Admin User', joinDate: new Date().toISOString(), avatarUrl: `https://ui-avatars.com/api/?name=Admin+User&background=10b981&color=fff` }]);
   const isAuthenticated = computed(() => user.value !== null);
   const emailNotifications = ref(initialState.emailNotifications ?? true);
   const aiAutoGenerate = ref(initialState.aiAutoGenerate ?? true);
@@ -53,7 +56,14 @@ export const useAuthStore = defineStore('auth', () => {
       showToast('Account with this email already exists', 'error');
       return false;
     }
-    const newUser = { email, password, name: name || 'New User' };
+    const newUser: User = { 
+      id: `u-${Date.now()}`,
+      email, 
+      password, 
+      name: name || 'New User',
+      joinDate: new Date().toISOString(),
+      avatarUrl: `https://ui-avatars.com/api/?name=${name || 'User'}&background=10b981&color=fff`
+    };
     users.value.push(newUser);
     user.value = newUser;
     showToast(`Welcome, ${newUser.name}!`, 'success');

@@ -32,7 +32,7 @@ function selectCategory(category: string | null) {
 </script>
 
 <template>
-  <aside class="w-72 flex-shrink-0 flex flex-col justify-between p-6 bg-white/60 backdrop-blur-xl border-r border-slate-200/50 relative z-10 hidden md:flex">
+  <aside class="w-72 flex-shrink-0 flex flex-col justify-between p-6 bg-white/60 dark:bg-[#1e1e1e]/80 backdrop-blur-xl border-r border-slate-200/50 dark:border-[#2a2a2a] relative z-10 hidden md:flex">
     
     <div class="flex-1 overflow-y-auto pr-2 no-scrollbar">
       <!-- Brand -->
@@ -51,7 +51,7 @@ function selectCategory(category: string | null) {
             to="/"
             @click="selectCategory(null)"
             class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium group"
-            :class="route.path === '/' && !activeCategory ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'"
+            :class="route.path === '/' && !activeCategory ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 dark:text-[#aaaaaa] dark:hover:bg-[#2a2a2a] dark:hover:text-white'"
           >
             <LayoutDashboard :size="20" :class="route.path === '/' && !activeCategory ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'" />
             Dashboard
@@ -61,7 +61,7 @@ function selectCategory(category: string | null) {
             to="/analytics"
             @click="selectCategory(null)"
             class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium group mt-1"
-            :class="route.path === '/analytics' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'"
+            :class="route.path === '/analytics' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 dark:text-[#aaaaaa] dark:hover:bg-[#2a2a2a] dark:hover:text-white'"
           >
             <PieChart :size="20" :class="route.path === '/analytics' ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'" />
             Analytics
@@ -71,7 +71,7 @@ function selectCategory(category: string | null) {
             to="/members"
             @click="selectCategory(null)"
             class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium group mt-1"
-            :class="route.path === '/members' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'"
+            :class="route.path === '/members' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 dark:text-[#aaaaaa] dark:hover:bg-[#2a2a2a] dark:hover:text-white'"
           >
             <Users :size="20" :class="route.path === '/members' ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'" />
             Members
@@ -101,7 +101,7 @@ function selectCategory(category: string | null) {
             class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium text-left group border-l-4 border-transparent"
             :class="activeCategory === category 
               ? 'bg-slate-800 text-white border-emerald-500 shadow-sm' 
-              : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'"
+              : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 dark:text-[#aaaaaa] dark:hover:bg-[#2a2a2a] dark:hover:text-white'"
           >
             <Layers :size="18" :class="activeCategory === category ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'" />
             {{ category }}
@@ -112,7 +112,7 @@ function selectCategory(category: string | null) {
 
     <!-- Bottom Actions -->
     <div class="space-y-2 pt-6 border-t border-slate-200/50 mt-4 flex-shrink-0">
-      <button @click="emit('open-settings')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition-all font-medium group dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100">
+      <button @click="emit('open-settings')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition-all font-medium group dark:text-[#aaaaaa] dark:hover:bg-[#2a2a2a] dark:hover:text-white">
         <Settings :size="20" class="text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300" />
         Settings
       </button>
