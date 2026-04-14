@@ -36,7 +36,7 @@ function toggleMode() {
           v-model="name" 
           type="text" 
           required 
-          class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+          class="w-full px-4 py-2 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all dark:bg-slate-900 dark:border-slate-800 dark:text-white"
           placeholder="John Doe"
         />
       </div>
@@ -48,7 +48,7 @@ function toggleMode() {
           v-model="email" 
           type="email" 
           required 
-          class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+          class="w-full px-4 py-2 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all dark:bg-slate-900 dark:border-slate-800 dark:text-white"
           placeholder="you@example.com"
         />
       </div>
@@ -60,7 +60,7 @@ function toggleMode() {
           v-model="password" 
           type="password" 
           required 
-          class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+          class="w-full px-4 py-2 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all dark:bg-slate-900 dark:border-slate-800 dark:text-white"
           placeholder="••••••••"
         />
       </div>

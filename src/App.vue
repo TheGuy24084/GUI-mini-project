@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router';
 import MainLayout from './components/Layout/MainLayout.vue';
 import ToastNotification from './components/ToastNotification.vue';
 import BookDetailSheet from './components/BookDetailSheet.vue';
-import SettingsOverlay from './components/SettingsOverlay.vue';
+import SettingsDrawer from './components/SettingsDrawer.vue';
 import AuthModal from './components/AuthModal.vue';
 import { useDark } from '@vueuse/core';
 
@@ -23,7 +23,7 @@ const showSettings = ref(false);
 
   <router-view v-else />
 
-  <SettingsOverlay :is-open="showSettings" @close="showSettings = false" />
+  <SettingsDrawer :is-open="showSettings" @close="showSettings = false" />
   <AuthModal />
   <ToastNotification />
   <BookDetailSheet />

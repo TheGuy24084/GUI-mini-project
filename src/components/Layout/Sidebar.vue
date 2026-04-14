@@ -112,8 +112,8 @@ function selectCategory(category: string | null) {
 
     <!-- Bottom Actions -->
     <div class="space-y-2 pt-6 border-t border-slate-200/50 mt-4 flex-shrink-0">
-      <button @click="authStore.isAuthenticated ? emit('open-settings') : (authStore.isAuthModalOpen = true)" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition-all font-medium group">
-        <Settings :size="20" class="text-slate-400 group-hover:text-slate-600" />
+      <button @click="emit('open-settings')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition-all font-medium group dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100">
+        <Settings :size="20" class="text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300" />
         Settings
       </button>
       <button v-if="authStore.isAuthenticated" @click="authStore.logout();" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-red-50 hover:text-red-600 transition-all font-medium group">

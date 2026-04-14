@@ -37,16 +37,16 @@ onKeyStroke('Escape', (e) => {
         class="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
       >
         <div
-          class="pointer-events-auto w-full max-w-lg rounded-2xl bg-white shadow-2xl shadow-slate-900/20 ring-1 ring-slate-200/50"
+          class="pointer-events-auto w-full max-w-lg rounded-2xl bg-white dark:bg-slate-950 shadow-2xl shadow-slate-900/20 dark:shadow-black/50 ring-1 ring-slate-200/50 dark:ring-slate-800"
           @click.stop
         >
           <!-- Header -->
-          <div class="flex items-center justify-between px-6 py-5 border-b border-slate-100">
-            <h2 class="text-lg font-semibold text-slate-900">{{ title }}</h2>
+          <div class="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800">
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-white">{{ title }}</h2>
             <button
               id="modal-close-btn"
               @click="close"
-              class="flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+              class="flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors dark:hover:bg-slate-900 dark:hover:text-slate-200"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
             </button>

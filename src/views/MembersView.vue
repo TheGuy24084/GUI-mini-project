@@ -29,7 +29,7 @@ const formatDate = (dateStr: string) => {
         v-for="member in mockMembers" 
         :key="member.id"
         @click="openMember(member)"
-        class="bg-white dark:bg-slate-800/50 rounded-2xl p-6 border border-slate-200/60 dark:border-slate-700/50 shadow-sm hover:shadow-md hover:-translate-y-1 hover:border-emerald-200 dark:hover:border-emerald-500/50 transition-all cursor-pointer group"
+        class="bg-white dark:bg-slate-900/50 rounded-2xl p-6 border border-slate-200/60 dark:border-slate-700/50 shadow-sm hover:shadow-md hover:-translate-y-1 hover:border-emerald-200 dark:hover:border-emerald-500/50 transition-all cursor-pointer group"
       >
         <div class="flex items-center gap-4 mb-4">
           <img :src="member.avatarUrl" class="w-12 h-12 rounded-full border-2 border-emerald-100 dark:border-emerald-900/50" />

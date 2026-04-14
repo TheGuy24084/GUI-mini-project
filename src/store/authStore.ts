@@ -94,6 +94,19 @@ export const useAuthStore = defineStore('auth', () => {
     }, 500);
   }
 
+  function updateProfileName(newName: string) {
+    if (user.value) {
+      user.value.name = newName;
+      
+      const storedUser = users.value.find((u) => u.email === user.value?.email);
+      if (storedUser) {
+        storedUser.name = newName;
+      }
+      
+      showToast('Profile updated', 'success');
+    }
+  }
+
   return {
     user,
     users,
@@ -104,5 +117,6 @@ export const useAuthStore = defineStore('auth', () => {
     signUp,
     login,
     logout,
+    updateProfileName,
   };
 });

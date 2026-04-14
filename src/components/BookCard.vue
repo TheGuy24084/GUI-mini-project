@@ -2,12 +2,14 @@
 import { computed } from 'vue';
 import { useBookStore } from '../store/bookStore';
 import { useAuthStore } from '../store/authStore';
+import { useUiStore } from '../store/uiStore';
 import { useToast } from '../composables/useToast';
 import type { Book } from '../data/books';
 
 const props = defineProps<{ book: Book }>();
 const store = useBookStore();
 const authStore = useAuthStore();
+const uiStore = useUiStore();
 const { showToast } = useToast();
 
 function openBookDetail() {
@@ -51,10 +53,13 @@ function handleToggle() {
 <template>
   <div 
     @click="openBookDetail"
-    class="group relative flex flex-col bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-2xl hover:shadow-emerald-500/20 hover:-translate-y-2 transition-all duration-300 cursor-pointer"
+    class="group relative flex flex-col bg-white dark:bg-slate-800 rounded-2xl shadow-sm dark:shadow-slate-900/50 border border-slate-100 dark:border-slate-700/60 overflow-hidden hover:shadow-2xl hover:shadow-emerald-500/20 dark:hover:shadow-emerald-500/10 hover:-translate-y-2 transition-all duration-300 cursor-pointer"
   >
     <!-- Book Cover -->
-    <div class="h-48 w-full relative flex items-center justify-center p-6 text-center overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900">
+    <div 
+      class="w-full relative flex items-center justify-center text-center overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 transition-all duration-300"
+      :class="uiStore.compactMode ? 'h-32 p-3' : 'h-48 p-6'"
+    >
       <img
         v-if="book.coverImage"
         :src="book.coverImage"
@@ -67,24 +72,36 @@ function handleToggle() {
     </div>
 
     <!-- Content -->
-    <div class="p-5 flex flex-col flex-1 bg-white">
+    <div 
+      class="flex flex-col flex-1 bg-white dark:bg-slate-800 transition-all duration-300"
+      :class="uiStore.compactMode ? 'p-3' : 'p-5'"
+    >
       <div class="flex justify-between items-start mb-1 gap-2">
-        <h4 class="font-semibold text-slate-900 line-clamp-1 flex-1" :title="book.title">{{ book.title }}</h4>
+        <h4 class="font-semibold text-slate-900 dark:text-slate-100 line-clamp-1 flex-1" :title="book.title">{{ book.title }}</h4>
       </div>
       <p class="text-sm text-slate-500 mb-1 line-clamp-1">{{ book.author }}</p>
       <span class="text-xs text-slate-400 mb-2">{{ book.category }}</span>
 
       <!-- Description Snippet -->
-      <p v-if="book.description" class="text-[11px] text-slate-500 line-clamp-2 italic mb-3 leading-relaxed">
-        {{ book.description }}
-      </p>
+      <Transition
+        enter-active-class="transition-all duration-300 ease-out flex"
+        enter-from-class="opacity-0 max-h-0 overflow-hidden"
+        enter-to-class="opacity-100 max-h-20"
+        leave-active-class="transition-all duration-300 ease-in flex"
+        leave-from-class="opacity-100 max-h-20"
+        leave-to-class="opacity-0 max-h-0 overflow-hidden"
+      >
+        <p v-if="uiStore.enableAiInsights && book.description" class="text-[11px] text-slate-500 line-clamp-2 italic mb-3 leading-relaxed">
+          {{ book.description }}
+        </p>
+      </Transition>
 
       <!-- Tags -->
       <div v-if="book.tags && book.tags.length > 0" class="flex flex-wrap gap-1 mb-4">
         <span 
           v-for="tag in book.tags" 
           :key="tag"
-          class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 text-[9px] font-bold tracking-tight uppercase"
+          class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 text-[9px] font-bold tracking-tight uppercase"
         >
           {{ tag }}
         </span>
@@ -95,10 +112,10 @@ function handleToggle() {
         <span
           class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border transition-colors duration-300"
           :class="book.isAvailable
-            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+            ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
             : (daysRemaining !== null && daysRemaining < 0) 
-              ? 'bg-rose-50 text-rose-700 border-rose-200' 
-              : 'bg-amber-100 text-amber-900 border-amber-200'"
+              ? 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20' 
+              : 'bg-amber-100 text-amber-900 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20'"
         >
           {{ statusText }}
         </span>

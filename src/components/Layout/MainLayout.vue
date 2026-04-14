@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import Sidebar from './Sidebar.vue';
+
+const emit = defineEmits<{
+  (e: 'open-settings'): void
+}>();
 </script>
 
 <template>
@@ -10,7 +14,7 @@ import Sidebar from './Sidebar.vue';
     <div class="absolute bottom-[-10%] right-[-5%] w-[30%] h-[30%] bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none"></div>
 
     <!-- Sidebar Component -->
-    <Sidebar />
+    <Sidebar @open-settings="emit('open-settings')" />
 
     <!-- Main Content Area -->
     <main class="flex-1 flex flex-col h-full overflow-hidden relative z-10">

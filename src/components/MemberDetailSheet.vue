@@ -44,10 +44,10 @@ const getDaysUntilDue = (returnDateStr?: string) => {
 
     <!-- Slide-over panel -->
     <div 
-      class="fixed inset-y-0 right-0 z-[70] w-full max-w-md max-h-screen bg-white dark:bg-slate-900 shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out border-l border-slate-200 dark:border-slate-800"
+      class="fixed inset-y-0 right-0 z-[70] w-full max-w-md max-h-screen bg-white dark:bg-slate-950 shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out border-l border-slate-200 dark:border-slate-800"
       :class="isOpen ? 'translate-x-0' : 'translate-x-full'"
     >
-      <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800/50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md">
         <h2 class="text-lg font-bold text-slate-800 dark:text-slate-100">Member Detail</h2>
         <button 
           @click="emit('close')"
@@ -72,7 +72,7 @@ const getDaysUntilDue = (returnDateStr?: string) => {
           <div>
             <h4 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Currently Borrowed</h4>
             
-            <div v-if="borrowedBooks.length === 0" class="text-center py-6 bg-slate-50 dark:bg-slate-800/30 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+            <div v-if="borrowedBooks.length === 0" class="text-center py-6 bg-slate-50 dark:bg-slate-900/40 rounded-xl border border-dashed border-slate-200 dark:border-slate-800">
               <p class="text-slate-500 dark:text-slate-400 text-sm">No books currently borrowed.</p>
             </div>
 
@@ -80,7 +80,7 @@ const getDaysUntilDue = (returnDateStr?: string) => {
               <div 
                 v-for="book in borrowedBooks" 
                 :key="book.id"
-                class="flex gap-4 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50 bg-white dark:bg-slate-800 shadow-sm"
+                class="flex gap-4 p-4 rounded-xl border border-slate-100 dark:border-slate-800/50 bg-white dark:bg-slate-900 shadow-sm"
               >
                 <img :src="book.coverImage" :alt="book.title" class="w-12 h-16 object-cover rounded shadow-sm flex-shrink-0" />
                 <div class="min-w-0 flex-1">
