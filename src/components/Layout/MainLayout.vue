@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Sidebar from './Sidebar.vue';
+import MobileHeader from './MobileHeader.vue';
 import { useUiStore } from '../../store/uiStore';
 
 const uiStore = useUiStore();
@@ -28,7 +29,7 @@ const emit = defineEmits<{
       <div 
         v-if="uiStore.isSidebarOpen" 
         @click="uiStore.isSidebarOpen = false"
-        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 md:hidden"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[45] md:hidden"
       ></div>
     </Transition>
 
@@ -37,7 +38,12 @@ const emit = defineEmits<{
 
     <!-- Main Content Area -->
     <main class="flex-1 flex flex-col h-full overflow-hidden relative z-10 w-full">
-      <slot></slot>
+      <!-- Global Mobile-Only Sticky Header -->
+      <MobileHeader />
+      
+      <div class="flex-1 overflow-y-auto w-full">
+        <slot></slot>
+      </div>
     </main>
 
   </div>

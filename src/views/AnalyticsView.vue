@@ -31,7 +31,7 @@ watch(
 <template>
   <div class="flex flex-col h-full w-full">
     <!-- Header -->
-    <header class="bg-white/80 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-30 px-4 md:px-8 py-5 flex items-center justify-between transition-all duration-300">
+    <header class="hidden lg:flex bg-white/80 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-30 px-8 py-5 items-center justify-between transition-all duration-300">
       <div class="flex items-center gap-3">
         <h1 class="text-xl font-bold text-slate-800">Library Analytics</h1>
       </div>

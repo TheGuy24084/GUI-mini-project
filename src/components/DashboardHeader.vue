@@ -29,7 +29,7 @@ watch([Meta_K, Ctrl_K], ([meta, ctrl]) => {
 </script>
 
 <template>
-  <header class="h-20 flex-shrink-0 flex items-center justify-between px-4 md:px-8 bg-white/40 dark:bg-[#1e1e1e]/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-[#2a2a2a] sticky top-0 z-20">
+  <header class="hidden lg:flex h-20 flex-shrink-0 items-center justify-between px-8 bg-white/40 dark:bg-[#1e1e1e]/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-[#2a2a2a] sticky top-0 z-20">
     
     <!-- Left Section: Mobile Menu & Breadcrumb -->
     <div class="flex items-center gap-4">

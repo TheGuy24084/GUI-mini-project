@@ -21,7 +21,7 @@ const formatDate = (dateStr: string) => {
 
 <template>
   <div class="h-full flex flex-col pt-8 px-8 sm:px-12 max-w-7xl mx-auto w-full pb-24">
-    <div class="mb-8">
+    <div class="mb-8 hidden lg:block">
       <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">Library Members</h1>
       <p class="text-slate-500 dark:text-slate-400 mt-1">Manage active readers and their borrowing history</p>
     </div>

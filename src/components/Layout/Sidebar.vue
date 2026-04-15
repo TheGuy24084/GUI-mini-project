@@ -42,7 +42,7 @@ function selectCategory(category: string | null) {
 <template>
   <!-- Sidebar Container -->
   <aside 
-    class="fixed inset-y-0 left-0 z-50 flex flex-col justify-between bg-white/60 dark:bg-[#1e1e1e]/80 backdrop-blur-xl border-r border-slate-200/50 dark:border-[#2a2a2a] transition-all duration-300 transform md:relative md:translate-x-0"
+    class="fixed inset-y-0 left-0 z-[60] flex flex-col justify-between bg-white/60 dark:bg-[#1e1e1e]/80 backdrop-blur-xl border-r border-slate-200/50 dark:border-[#2a2a2a] transition-all duration-300 transform md:relative md:translate-x-0"
     :class="[
       uiStore.isSidebarOpen ? 'translate-x-0 w-72' : '-translate-x-full w-72 md:w-20 lg:w-72',
       'shadow-2xl md:shadow-none'
@@ -51,9 +51,9 @@ function selectCategory(category: string | null) {
     <!-- Close button for mobile -->
     <button 
       @click="uiStore.isSidebarOpen = false"
-      class="absolute top-6 right-[-12px] p-1.5 bg-emerald-500 text-white rounded-full shadow-lg md:hidden z-50"
+      class="absolute top-4 right-4 p-2 bg-slate-100 dark:bg-[#2a2a2a] text-slate-500 dark:text-[#aaaaaa] rounded-xl shadow-sm md:hidden hover:bg-slate-200 dark:hover:bg-[#333333] transition-colors"
     >
-      <X :size="16" />
+      <X :size="20" />
     </button>
     
     <div class="flex-1 overflow-y-auto pr-2 no-scrollbar p-6">
