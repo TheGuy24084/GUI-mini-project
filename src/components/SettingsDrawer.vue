@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, computed, onUnmounted } from 'vue';
 import { useAuthStore } from '../store/authStore';
 import { useUiStore } from '../store/uiStore';
-import { Sun, Moon, User, Settings, X, AlignJustify, Sparkles } from 'lucide-vue-next';
+import { useToast } from '../composables/useToast';
+import { Sun, Moon, User, Settings, X, AlignJustify, Sparkles, Camera, ImagePlus } from 'lucide-vue-next';
+import UserAvatar from './UserAvatar.vue';
 
 const emit = defineEmits<{
   (e: 'close'): void;
@@ -27,6 +29,60 @@ function handleSaveProfile() {
     authStore.updateProfileName(profileName.value.trim());
   }
 }
+
+const fileInputRef = ref<HTMLInputElement | null>(null);
+const previewImage = ref<string | null>(null);
+const isUploading = ref(false);
+const { showToast } = useToast();
+
+// Current display image source for preview
+const currentPreviewImage = computed(() => {
+  return previewImage.value || authStore.user?.profilePic || null;
+});
+
+function handleFileUpload(e: Event) {
+  const file = (e.target as HTMLInputElement).files?.[0];
+  if (!file) return;
+  
+  if (file.size > 2 * 1024 * 1024) {
+    showToast('Image size must be under 2MB', 'error');
+    // Reset file input so same file can be re-selected
+    if (fileInputRef.value) fileInputRef.value.value = '';
+    return;
+  }
+  
+  isUploading.value = true;
+  
+  // Revoke previous object URL to prevent memory leaks
+  if (previewImage.value) {
+    URL.revokeObjectURL(previewImage.value);
+  }
+  
+  // Create an instant UI preview
+  previewImage.value = URL.createObjectURL(file);
+  
+  const reader = new FileReader();
+  reader.onload = () => {
+    authStore.updateProfilePicture(reader.result as string);
+    isUploading.value = false;
+    // Clear preview since authStore now has the Base64 version
+    if (previewImage.value) {
+      URL.revokeObjectURL(previewImage.value);
+      previewImage.value = null;
+    }
+  };
+  reader.readAsDataURL(file);
+  
+  // Reset file input so re-selecting same file triggers change event
+  if (fileInputRef.value) fileInputRef.value.value = '';
+}
+
+// Cleanup object URLs on unmount
+onUnmounted(() => {
+  if (previewImage.value) {
+    URL.revokeObjectURL(previewImage.value);
+  }
+});
 
 function clearData() {
   localStorage.clear();
@@ -83,7 +139,29 @@ function clearData() {
                 <div v-if="authStore.isAuthenticated">
                   <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2"><User class="w-4 h-4" /> Personalization</h3>
                   <div class="space-y-4 bg-slate-50 dark:bg-[#0f0f0f]/50 p-4 rounded-2xl border border-slate-100 dark:border-[#2a2a2a]">
-                    <div>
+                    <div class="flex flex-col items-center py-4 relative">
+                      <div class="relative group cursor-pointer" @click="fileInputRef?.click()">
+                        <!-- Profile Image / Falling back to UserAvatar component -->
+                        <UserAvatar 
+                          :user="{ name: authStore.user?.name || 'Guest', profilePic: currentPreviewImage || undefined }"
+                          size="w-24 h-24 border-4 border-emerald-100 dark:border-emerald-900/40 shadow-xl ring-4 ring-emerald-500/20 transition-all duration-300 group-hover:scale-105 group-hover:ring-emerald-500/40"
+                        />
+                        <!-- Hover Overlay -->
+                        <div class="absolute inset-0 bg-black/40 rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                          <Camera class="w-6 h-6 text-white mb-0.5" />
+                          <span class="text-[10px] text-white/90 font-medium">Edit</span>
+                        </div>
+                        <!-- Uploading Spinner Overlay -->
+                        <div v-if="isUploading" class="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
+                          <div class="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        </div>
+                        <input type="file" ref="fileInputRef" accept="image/*" class="hidden" @change="handleFileUpload" />
+                      </div>
+                      <span class="text-xs text-slate-400 dark:text-slate-500 mt-3 font-medium uppercase tracking-wider">Click to update</span>
+                      <span class="text-[10px] text-slate-300 dark:text-slate-600 mt-0.5">Max 2MB · JPG, PNG, WebP</span>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-200 dark:border-slate-800">
                       <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Display Name</label>
                       <div class="flex gap-2">
                         <input

@@ -10,7 +10,7 @@ export interface User {
   name: string;
   id?: string;
   joinDate?: string;
-  avatarUrl?: string;
+  profilePic?: string;
 }
 
 export const useAuthStore = defineStore('auth', () => {
@@ -22,15 +22,15 @@ export const useAuthStore = defineStore('auth', () => {
     aiAutoGenerate: boolean;
   }>('library_auth', {
     user: null,
-    users: [{ id: 'admin-1', email: 'admin@library.com', password: 'password', name: 'Admin User', joinDate: new Date().toISOString(), avatarUrl: `https://ui-avatars.com/api/?name=Admin+User&background=10b981&color=fff` }],
+    users: [{ id: 'admin-1', email: 'admin@library.com', password: 'password', name: 'Admin User', joinDate: new Date().toISOString(), profilePic: `https://ui-avatars.com/api/?name=Admin+User&background=10b981&color=fff` }],
     emailNotifications: true,
     aiAutoGenerate: true
   });
   
   const initialState = load();
 
-  const user = ref<User | null>(initialState.user || (initialState.isAuthenticated ? { id: 'admin-1', email: 'admin@library.com', name: 'Admin User', joinDate: new Date().toISOString(), avatarUrl: `https://ui-avatars.com/api/?name=Admin+User&background=10b981&color=fff` } : null));
-  const users = ref<User[]>(initialState.users || [{ id: 'admin-1', email: 'admin@library.com', password: 'password', name: 'Admin User', joinDate: new Date().toISOString(), avatarUrl: `https://ui-avatars.com/api/?name=Admin+User&background=10b981&color=fff` }]);
+  const user = ref<User | null>(initialState.user || (initialState.isAuthenticated ? { id: 'admin-1', email: 'admin@library.com', name: 'Admin User', joinDate: new Date().toISOString(), profilePic: `https://ui-avatars.com/api/?name=Admin+User&background=10b981&color=fff` } : null));
+  const users = ref<User[]>(initialState.users || [{ id: 'admin-1', email: 'admin@library.com', password: 'password', name: 'Admin User', joinDate: new Date().toISOString(), profilePic: `https://ui-avatars.com/api/?name=Admin+User&background=10b981&color=fff` }]);
   const isAuthenticated = computed(() => user.value !== null);
   const emailNotifications = ref(initialState.emailNotifications ?? true);
   const aiAutoGenerate = ref(initialState.aiAutoGenerate ?? true);
@@ -62,7 +62,7 @@ export const useAuthStore = defineStore('auth', () => {
       password, 
       name: name || 'New User',
       joinDate: new Date().toISOString(),
-      avatarUrl: `https://ui-avatars.com/api/?name=${name || 'User'}&background=10b981&color=fff`
+      profilePic: `https://ui-avatars.com/api/?name=${name || 'User'}&background=10b981&color=fff`
     };
     users.value.push(newUser);
     user.value = newUser;
@@ -117,6 +117,19 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  function updateProfilePicture(base64Image: string) {
+    if (user.value) {
+      user.value.profilePic = base64Image;
+      
+      const storedUser = users.value.find((u) => u.email === user.value?.email);
+      if (storedUser) {
+        storedUser.profilePic = base64Image;
+      }
+      
+      showToast('Profile picture updated', 'success');
+    }
+  }
+
   return {
     user,
     users,
@@ -128,5 +141,6 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     logout,
     updateProfileName,
+    updateProfilePicture,
   };
 });

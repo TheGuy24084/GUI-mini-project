@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useAuthStore, type User } from '../store/authStore';
 import { Mail, Calendar } from 'lucide-vue-next';
 import MemberDetailSheet from '../components/MemberDetailSheet.vue';
+import UserAvatar from '../components/UserAvatar.vue';
 
 const authStore = useAuthStore();
 const selectedMember = ref<User | null>(null);
@@ -33,7 +34,7 @@ const formatDate = (dateStr: string) => {
         class="bg-white dark:bg-[#1e1e1e] rounded-2xl p-6 border border-slate-200/60 dark:border-[#2a2a2a] shadow-sm hover:shadow-md hover:-translate-y-1 hover:border-emerald-200 dark:hover:border-emerald-500/50 transition-all cursor-pointer group"
       >
         <div class="flex items-center gap-4 mb-4">
-          <img :src="member.avatarUrl" class="w-12 h-12 rounded-full border-2 border-emerald-100 dark:border-emerald-900/50" />
+          <UserAvatar :user="member" size="w-12 h-12 border-2 border-emerald-100 dark:border-emerald-900/50" />
           <div>
             <h3 class="font-bold text-slate-800 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">{{ member.name }}</h3>
             <p class="text-xs text-slate-400 dark:text-slate-500 font-medium font-mono">ID: {{ member.id }}</p>

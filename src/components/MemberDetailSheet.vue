@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { X, BookOpen, Clock } from 'lucide-vue-next';
 import { type User } from '../store/authStore';
 import { useBookStore } from '../store/bookStore';
+import UserAvatar from './UserAvatar.vue';
 
 const props = defineProps<{
   isOpen: boolean;
@@ -60,7 +61,10 @@ const getDaysUntilDue = (returnDateStr?: string) => {
       <div class="flex-1 overflow-y-auto w-full no-scrollbar">
         <div class="p-6">
           <div class="flex flex-col items-center text-center border-b border-slate-100 dark:border-slate-800 pb-8 mb-8">
-            <img :src="member.avatarUrl" class="w-24 h-24 rounded-full border-4 border-emerald-50 dark:border-emerald-900/30 mb-4 shadow-sm" />
+            <UserAvatar 
+              :user="member" 
+              size="w-24 h-24 border-4 border-emerald-50 dark:border-emerald-900/30 mb-4 shadow-sm" 
+            />
             <h3 class="text-2xl font-bold text-slate-800 dark:text-slate-100">{{ member.name }}</h3>
             <p class="text-slate-500 dark:text-slate-400 mb-2">{{ member.email }}</p>
             <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-full text-xs font-semibold">

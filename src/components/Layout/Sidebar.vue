@@ -14,6 +14,7 @@ import {
 import { useBookStore } from '../../store/bookStore';
 import { useRoute } from 'vue-router';
 import { useAuthStore } from '../../store/authStore';
+import UserAvatar from '../UserAvatar.vue';
 
 const store = useBookStore();
 const authStore = useAuthStore();
@@ -111,8 +112,22 @@ function selectCategory(category: string | null) {
     </div>
 
     <!-- Bottom Actions -->
-    <div class="space-y-2 pt-6 border-t border-slate-200/50 mt-4 flex-shrink-0">
-      <button @click="emit('open-settings')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition-all font-medium group dark:text-[#aaaaaa] dark:hover:bg-[#2a2a2a] dark:hover:text-white">
+    <div class="space-y-4 pt-6 border-t border-slate-200/50 mt-4 flex-shrink-0">
+      
+      <!-- Mini Profile (Sidebar) -->
+      <div v-if="authStore.isAuthenticated" class="flex items-center gap-3 px-2 mb-2">
+        <UserAvatar 
+          :user="authStore.user" 
+          size="w-10 h-10 border-2 border-emerald-200 dark:border-emerald-900/50 shadow-sm ring-2 ring-emerald-500/20 transition-transform hover:scale-105" 
+        />
+        <div class="flex flex-col overflow-hidden">
+          <span class="text-sm font-semibold text-slate-900 dark:text-white truncate" :title="authStore.user?.name">{{ authStore.user?.name }}</span>
+          <span class="text-[10px] text-slate-500 dark:text-[#aaaaaa] truncate uppercase tracking-wider">Member</span>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <button @click="emit('open-settings')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition-all font-medium group dark:text-[#aaaaaa] dark:hover:bg-[#2a2a2a] dark:hover:text-white">
         <Settings :size="20" class="text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300" />
         Settings
       </button>
@@ -124,6 +139,7 @@ function selectCategory(category: string | null) {
         <LogIn :size="20" class="text-slate-400 group-hover:text-emerald-500 transition-colors" />
         Sign In
       </button>
+      </div>
     </div>
   </aside>
 </template>

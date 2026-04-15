@@ -68,15 +68,6 @@ watch([Meta_K, Ctrl_K], ([meta, ctrl]) => {
           </div>
         </div>
       </div>
-      <div class="hidden md:flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-[#2a2a2a]">
-        <div class="flex flex-col items-end">
-          <span class="text-sm font-semibold text-slate-900 dark:text-white">{{ authStore.isAuthenticated ? authStore.user?.name : 'Guest' }}</span>
-          <span class="text-xs text-slate-500 dark:text-[#aaaaaa]">{{ authStore.isAuthenticated ? 'Member' : 'Public Access' }}</span>
-        </div>
-        <img :src="`https://ui-avatars.com/api/?name=${authStore.isAuthenticated ? authStore.user?.name : 'Guest'}&background=10b981&color=fff`" alt="User avatar" class="w-10 h-10 rounded-xl border-2 border-white dark:border-[#2a2a2a] shadow-md object-cover" />
-      </div>
-      <!-- Mobile Profile Avatar -->
-      <img :src="`https://ui-avatars.com/api/?name=${authStore.isAuthenticated ? authStore.user?.name : 'Guest'}&background=10b981&color=fff`" alt="User avatar" class="w-10 h-10 rounded-xl border-2 border-white dark:border-[#2a2a2a] shadow-md object-cover md:hidden" />
     </div>
   </header>
 </template>
