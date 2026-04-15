@@ -39,7 +39,7 @@ watch([Meta_K, Ctrl_K], ([meta, ctrl]) => {
       >
         <Menu class="h-6 w-6" />
       </button>
-      <h1 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white truncate max-w-[120px] xs:max-w-none">Dashboard</h1>
+      <h1 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white whitespace-nowrap">Dashboard</h1>
     </div>
 
     <!-- Center Section: Search Bar -->
