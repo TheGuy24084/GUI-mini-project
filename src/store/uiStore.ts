@@ -24,6 +24,7 @@ export const useUiStore = defineStore('ui', () => {
   const uiPrefs = load();
   const compactMode = ref(uiPrefs.compactMode ?? false);
   const enableAiInsights = ref(uiPrefs.enableAiInsights ?? true);
+  const isSidebarOpen = ref(false);
 
   watch([compactMode, enableAiInsights], () => {
     save({
@@ -45,5 +46,6 @@ export const useUiStore = defineStore('ui', () => {
     addNotification,
     compactMode,
     enableAiInsights,
+    isSidebarOpen,
   };
 });
