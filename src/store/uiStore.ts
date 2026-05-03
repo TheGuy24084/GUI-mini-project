@@ -8,15 +8,15 @@ export const useUiStore = defineStore('ui', () => {
   const toggleDark = useToggle(isDark);
   
   const notifications = ref<string[]>([
-    "System Updated: v2.1.0 deployed successfully",
-    "Book Due Soon: 'The Pragmatic Programmer' is due in 2 days",
-    "Welcome to Smart Library OS!"
+    "Culinara OS v1.0: Kitchen management system is live!",
+    "New Cuisine Added: Mediterranean recipes now available",
+    "Chef Tip: Use fresh herbs for better aroma"
   ]);
 
   const { load, save } = useStorage<{
     compactMode: boolean;
     enableAiInsights: boolean;
-  }>('library_ui_prefs', {
+  }>('culinara_ui_prefs', {
     compactMode: false,
     enableAiInsights: true
   });

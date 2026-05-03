@@ -1,22 +1,31 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useBookStore } from '../store/bookStore';
+import { useRecipeStore } from '../store/recipeStore';
 import { Bar } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
-const store = useBookStore();
+const store = useRecipeStore();
 
 const chartData = computed(() => {
-  const stats = store.stats;
+  const recipes = store.recipes;
+  const difficultyCounts: Record<string, number> = { 'Easy': 0, 'Medium': 0, 'Hard': 0 };
+  
+  recipes.forEach(r => {
+    if (difficultyCounts[r.difficulty] !== undefined) {
+      difficultyCounts[r.difficulty]++;
+    }
+  });
+
   return {
-    labels: ['Available', 'Borrowed'],
+    labels: Object.keys(difficultyCounts),
     datasets: [
       {
-        label: 'Books',
-        backgroundColor: ['#10b981', '#ef4444'], // Emerald for available, Red for borrowed
-        data: [stats.available, stats.borrowed]
+        label: 'Recipes',
+        backgroundColor: ['#10b981', '#f59e0b', '#ef4444'], // Emerald, Amber, Rose
+        borderRadius: 8,
+        data: Object.values(difficultyCounts)
       }
     ]
   };
@@ -33,8 +42,13 @@ const chartOptions = {
   scales: {
     y: {
       beginAtZero: true,
-      ticks: {
-        stepSize: 1
+      grid: {
+        display: false
+      }
+    },
+    x: {
+      grid: {
+        display: false
       }
     }
   }

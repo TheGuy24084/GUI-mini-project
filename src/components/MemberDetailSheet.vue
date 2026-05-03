@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { X, BookOpen, Clock } from 'lucide-vue-next';
+import { X, Heart, Star, ChefHat } from 'lucide-vue-next';
 import { type User } from '../store/authStore';
-import { useBookStore } from '../store/bookStore';
+import { useRecipeStore } from '../store/recipeStore';
 import UserAvatar from './UserAvatar.vue';
 
 const props = defineProps<{
@@ -14,25 +14,12 @@ const emit = defineEmits<{
   (e: 'close'): void;
 }>();
 
-const bookStore = useBookStore();
+const recipeStore = useRecipeStore();
 
-const borrowedBooks = computed(() => {
-  return bookStore.books.filter(b => b.borrowerId === props.member.id);
+// For demonstration, we'll just show some favorited recipes as "Chef's Specials"
+const favoriteRecipes = computed(() => {
+  return recipeStore.recipes.filter(r => r.isFavorited).slice(0, 3);
 });
-
-const formatDate = (dateStr?: string) => {
-  if (!dateStr) return '';
-  return new Date(dateStr).toLocaleDateString();
-};
-
-const getDaysUntilDue = (returnDateStr?: string) => {
-  if (!returnDateStr) return 0;
-  const returnDate = new Date(returnDateStr);
-  const now = new Date();
-  const diffTime = returnDate.getTime() - now.getTime();
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays;
-};
 </script>
 
 <template>
@@ -49,7 +36,7 @@ const getDaysUntilDue = (returnDateStr?: string) => {
       :class="isOpen ? 'translate-x-0' : 'translate-x-full'"
     >
       <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-[#2a2a2a] bg-white/80 dark:bg-[#1e1e1e]/80 backdrop-blur-md">
-        <h2 class="text-lg font-bold text-slate-800 dark:text-white">Member Detail</h2>
+        <h2 class="text-lg font-bold text-slate-800 dark:text-white">Chef Profile</h2>
         <button 
           @click="emit('close')"
           class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
@@ -68,32 +55,33 @@ const getDaysUntilDue = (returnDateStr?: string) => {
             <h3 class="text-2xl font-bold text-slate-800 dark:text-slate-100">{{ member.name }}</h3>
             <p class="text-slate-500 dark:text-slate-400 mb-2">{{ member.email }}</p>
             <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-full text-xs font-semibold">
-              <BookOpen :size="12" />
-              {{ borrowedBooks.length }} Active Borrows
+              <Heart :size="12" />
+              Community Chef
             </div>
           </div>
 
           <div>
-            <h4 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Currently Borrowed</h4>
+            <h4 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Chef's Favorites</h4>
             
-            <div v-if="borrowedBooks.length === 0" class="text-center py-6 bg-slate-50 dark:bg-[#0f0f0f] rounded-xl border border-dashed border-slate-200 dark:border-[#2a2a2a]">
-              <p class="text-slate-500 dark:text-[#aaaaaa] text-sm">No books currently borrowed.</p>
+            <div v-if="favoriteRecipes.length === 0" class="flex flex-col items-center justify-center py-10 bg-slate-50 dark:bg-[#0f0f0f] rounded-2xl border border-dashed border-slate-200 dark:border-[#2a2a2a]">
+              <ChefHat :size="32" class="text-slate-300 dark:text-slate-700 mb-2" />
+              <p class="text-slate-500 dark:text-[#aaaaaa] text-xs font-medium">No favorites shared yet</p>
             </div>
 
             <div v-else class="space-y-4">
               <div 
-                v-for="book in borrowedBooks" 
-                :key="book.id"
+                v-for="recipe in favoriteRecipes" 
+                :key="recipe.id"
                 class="flex gap-4 p-4 rounded-xl border border-slate-100 dark:border-[#2a2a2a] bg-white dark:bg-[#0f0f0f] shadow-sm"
               >
-                <img :src="book.coverImage" :alt="book.title" class="w-12 h-16 object-cover rounded shadow-sm flex-shrink-0" />
+                <img :src="recipe.image" :alt="recipe.name" class="w-12 h-16 object-cover rounded shadow-sm flex-shrink-0" />
                 <div class="min-w-0 flex-1">
-                  <h5 class="font-bold text-slate-800 dark:text-white truncate">{{ book.title }}</h5>
-                  <p class="text-xs text-slate-500 dark:text-[#aaaaaa] mb-2 truncate">{{ book.author }}</p>
+                  <h5 class="font-bold text-slate-800 dark:text-white truncate">{{ recipe.name }}</h5>
+                  <p class="text-xs text-slate-500 dark:text-[#aaaaaa] mb-2 truncate">{{ recipe.cuisine }} • {{ recipe.difficulty }}</p>
                   
-                  <div class="flex items-center gap-1 text-[11px] font-medium" :class="getDaysUntilDue(book.returnBy) < 3 ? 'text-red-500 dark:text-red-400' : 'text-slate-500 dark:text-slate-400'">
-                    <Clock :size="12" />
-                    Due {{ formatDate(book.returnBy) }} ({{ getDaysUntilDue(book.returnBy) }} days)
+                  <div class="flex items-center gap-1 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+                    <Star :size="12" class="fill-current" />
+                    {{ recipe.rating }} Rating
                   </div>
                 </div>
               </div>

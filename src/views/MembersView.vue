@@ -4,6 +4,7 @@ import { useAuthStore, type User } from '../store/authStore';
 import { Mail, Calendar } from 'lucide-vue-next';
 import MemberDetailSheet from '../components/MemberDetailSheet.vue';
 import UserAvatar from '../components/UserAvatar.vue';
+import DashboardHeader from '../components/DashboardHeader.vue';
 
 const authStore = useAuthStore();
 const selectedMember = ref<User | null>(null);
@@ -20,11 +21,14 @@ const formatDate = (dateStr: string) => {
 </script>
 
 <template>
-  <div class="h-full flex flex-col pt-8 px-8 sm:px-12 max-w-7xl mx-auto w-full pb-24">
-    <div class="mb-8 hidden lg:block">
-      <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">Library Members</h1>
-      <p class="text-slate-500 dark:text-slate-400 mt-1">Manage active readers and their borrowing history</p>
-    </div>
+  <div class="flex flex-col h-full w-full">
+    <DashboardHeader />
+    <div class="flex-1 overflow-y-auto p-4 md:p-8 relative">
+      <div class="max-w-7xl mx-auto pb-24">
+        <div class="mb-8">
+          <h2 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">Community Chefs</h2>
+          <p class="text-slate-500 dark:text-[#aaaaaa]">Discover talented cooks and their shared recipes</p>
+        </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       <div 
@@ -37,7 +41,7 @@ const formatDate = (dateStr: string) => {
           <UserAvatar :user="member" size="w-12 h-12 border-2 border-emerald-100 dark:border-emerald-900/50" />
           <div>
             <h3 class="font-bold text-slate-800 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">{{ member.name }}</h3>
-            <p class="text-xs text-slate-400 dark:text-slate-500 font-medium font-mono">ID: {{ member.id }}</p>
+            <p class="text-xs text-slate-400 dark:text-slate-500 font-medium font-mono uppercase tracking-tighter">Chef ID: {{ member.id }}</p>
           </div>
         </div>
         
@@ -61,5 +65,7 @@ const formatDate = (dateStr: string) => {
       :member="selectedMember" 
       @close="isSheetOpen = false" 
     />
+      </div>
+    </div>
   </div>
 </template>

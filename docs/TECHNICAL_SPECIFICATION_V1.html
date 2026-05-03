@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Specification - SmartLib OS</title>
+    
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --emerald-500: #10b981;
+            --emerald-600: #059669;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--slate-800);
+            background-color: var(--slate-50);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            background: white;
+            padding: 60px 80px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 8px;
+        }
+
+        /* Markdown Overrides */
+        h1 {
+            font-size: 2.5em;
+            color: var(--slate-900);
+            border-bottom: 2px solid var(--emerald-500);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            color: var(--slate-900);
+            margin-top: 1.5em;
+            border-left: 4px solid var(--emerald-500);
+            padding-left: 15px;
+        }
+
+        h3 {
+            font-size: 1.4em;
+            color: var(--slate-700);
+            margin-top: 1.25em;
+        }
+
+        p, li {
+            font-size: 1.05em;
+            color: var(--slate-800);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--slate-100);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: var(--slate-900);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th {
+            background: var(--slate-100);
+            text-align: left;
+            padding: 12px;
+            border: 1px solid var(--slate-200);
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px;
+            border: 1px solid var(--slate-200);
+        }
+
+        blockquote {
+            background: var(--slate-50);
+            border-left: 4px solid var(--slate-200);
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid var(--slate-200);
+            margin: 40px 0;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        /* Floating Export Button */
+        #controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .btn-print {
+            background: var(--emerald-600);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-print:hover {
+            background: var(--emerald-500);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.23);
+        }
+
+        /* Print Media Query */
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+                margin: 0 auto;
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+            }
+            #controls {
+                display: none;
+            }
+            h2 {
+                page-break-before: always;
+            }
+            pre, blockquote, table {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="controls">
+    <button class="btn-print" onclick="window.print()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        Export to PDF
+    </button>
+</div>
+
+<div class="container">
+    <div id="content">Loading report...</div>
+</div>
+
+<!-- Raw Markdown Source -->
+<script type="text/template" id="markdown-source">
+# Technical Specification & Engineering Dossier: SmartLib OS
+**Version:** 1.0.0  
+**Lead Engineer:** Ilmam I.M. (EG/2023/5646)  
+**Date:** April 16, 2026
+
+---
+
+## Chapter 1: System Architecture & Design Philosophy
+
+### 1.1 Atomic Design Methodology in Vue 3
+The SmartLib OS frontend architecture adopts the **Atomic Design** philosophy to ensure scalability, reusability, and maintainability. Components are strictly categorized into five hierarchical levels, though for the scope of this implementation, we focus on the first three: Atoms, Molecules, and Organisms.
+
+#### Hierarchy Implementation Map
+
+| Level | Component | Functional Description |
+|-------|-----------|------------------------|
+| **Atoms** | `UserAvatar.vue` | A singular display unit representing user identity. |
+| **Atoms** | `BaseModal.vue` | The foundation for all overlay interactions. |
+| **Atoms** | `EmptyState.vue` | A fallback component for null data states. |
+| **Molecules** | `BookCard.vue` | Combines `Atoms` with interactive status logic. |
+| **Molecules** | `StatsGrid.vue` | A composite component for data aggregation. |
+| **Organisms** | `Sidebar.vue` | Navigation and Identity management orchestrator. |
+| **Organisms** | `DashboardHeader.vue` | Manages Global Search, Notifications, and Profile. |
+| **Organisms** | `BookGrid.vue` | Primary life-cycle orchestrator for book record sets. |
+
+---
+
+### 1.2 The 'Slate & Emerald' Design System
+The design philosophy centers on **Visual Professionalism**. Pairing a deep Slate base with Emerald accents creates a futuristic, high-contrast environment.
+
+#### Design Token Specification
+
+| Token | CSS Variable | Hex Code | WCAG Rationale |
+|-------|--------------|----------|----------------|
+| **Core Brand** | `emerald-500` | `#10b981` | > 4.5:1 ratio against Slate-900. |
+| **Deep Slate** | `slate-900` | `#0f172a` | Stable, non-straining dark mode base. |
+| **Subtle Border**| `slate-200/50` | `rgba(226,232,240,0.5)` | Soft "Glassmorphism" boundaries. |
+
+---
+
+## Chapter 2: State Management & Data Flow (The Pinia Layer)
+
+### 2.1 Recursive Store Architecture
+
+```mermaid
+graph TD
+    UI[uiStore] -->|Triggers| Sidebar[Sidebar Overlay State]
+    UI -->|Stores| Notifications[Notification Stack]
+    Auth[authStore] -->|Provides| User[User Identity]
+    Auth -->|Persists| Avatar[Base64 Profile Picture]
+    Book[bookStore] -->|Consumes| User
+    Book -->|Manages| Books[Library Inventory]
+    Book -->|Filters| Search[Reactive Search Query]
+    Book -->|Calculates| Stats[Inventory Metrics]
+```
+
+### 2.2 Persistence & State Hydration Algorithm
+The state hydration process is handled by a custom `useStorage` composable.
+
+$$ S_{t+1} = \text{Serialize}(\text{Reactive\_Proxy}(S_t)) \implies \text{LocalStorage}.set(Key, S_{t+1}) $$
+
+### 2.3 The 'Borrow/Return' Transaction Logic
+
+**Logic Proof for Return Calculation:**
+Let $T_{now}$ be the current Unix timestamp. The return deadline $T_{return}$ is defined as:
+$$ T_{return} = T_{now} + (14 \times 24 \times 60 \times 60 \times 1000) $$
+
+---
+
+## Chapter 3: AI Intelligence Layer (Gemini 3 Pro Integration)
+
+### 3.1 Asynchronous Metadata Queue Algorithm
+SmartLib OS offloads intensive metadata generation to the Gemini 3 Pro / Flash models using an asynchronous, non-blocking queue pattern to maintain a 60fps UI.
+
+### 3.2 Prompt Engineering Specifications
+
+| Operation | System Instruction | Prompt Template |
+|-------|--------------------|-----------------|
+| **Summarization** | `You are a professional librarian.` | `Title: {title} \n Author: {author} \n Provide summary.` |
+| **Analytics** | `You are an expert Data Analyst.` | `Library Data Snapshot... Provide summary.` |
+
+---
+
+## Chapter 4: Frontend Engineering & Performance
+
+### 4.1 Adaptive Breakpoint Logic
+The sidebar state $S_{view}$ is defined as:
+$$ S_{view} = \begin{cases} \text{Fixed Overlay} & W_{vp} < 768px \\ \text{Relative Column} & W_{vp} \geq 768px \end{cases} $$
+
+### 4.2 Rendering Performance
+- **List Reconciliation**: Unique `:key` bindings for stable patches.
+- **Reactive Caching**: Cached `computed` properties for complex stats.
+
+### 4.3 Global Shortcut System
+The trigger $F_{search}$ is activated if:
+$$ (\text{Key} = 'K') \land (\text{Ctrl} \lor \text{Meta}) = \text{True} $$
+
+---
+
+## Chapter 5: Analytics & Data Visualization
+
+### 5.1 Analytics Data Parsing Algorithms
+The system parses the `books` array for frequency aggregation:
+$$ P(c) = \frac{n_c}{\sum_{i=1}^{k} n_i} $$
+
+### 5.2 Availability Calculation Logic
+The percentage of available inventory $A_{pct}$ is proven by:
+$$ A_{pct} = \left( \frac{|\{b \in B : b_{isAvailable} = \text{True}\}|}{|B|} \right) \times 100 $$
+
+---
+
+## Chapter 6: Component Library Documentation
+
+### 6.1 Sidebar.vue (Organism)
+Role: Global application navigation and identity management.
+
+### 6.2 BookCard.vue (Molecule)
+Role: Visual representation of library items with $\Delta D = \lceil \frac{T_r - T_t}{8.64 \times 10^7} \rceil$ calculation logic.
+
+### 6.3 AddBookForm.vue (Molecule)
+Role: Interactive data entry with ISBN-13 Regex `/^\d{13}$/` validation.
+
+---
+**[END OF DOCUMENT]**
+**Lead Engineer Final Verification:** Verified for Technical Accuracy and WCAG 2.1 Compliance.
+</script>
+
+<script>
+    // Initialize Mermaid
+    mermaid.initialize({ startOnLoad: false });
+
+    async function render() {
+        const source = document.getElementById('markdown-source').innerText;
+        const target = document.getElementById('content');
+        
+        // Render Markdown
+        target.innerHTML = marked.parse(source);
+
+        // Render Mermaid
+        const mermaids = document.querySelectorAll('pre code.language-mermaid');
+        for (let i = 0; i < mermaids.length; i++) {
+            const m = mermaids[i];
+            const graphDefinition = m.innerText;
+            const container = document.createElement('div');
+            container.className = 'mermaid';
+            const id = 'mermaid-' + i;
+            
+            const { render } = await mermaid.render(id, graphDefinition);
+            container.innerHTML = render;
+            m.parentElement.replaceWith(container);
+        }
+
+        // Trigger MathJax
+        if (window.MathJax) {
+            MathJax.typeset();
+        }
+    }
+
+    window.onload = render;
+</script>
+
+</body>
+</html>

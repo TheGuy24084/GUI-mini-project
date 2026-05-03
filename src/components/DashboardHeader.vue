@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { Search, Bell, Menu } from 'lucide-vue-next';
-import { useBookStore } from '../store/bookStore';
+import { useRecipeStore } from '../store/recipeStore';
 import { useAuthStore } from '../store/authStore';
 import { useUiStore } from '../store/uiStore';
 import { useMagicKeys } from '@vueuse/core';
+import { useRouter, useRoute } from 'vue-router';
 
-const store = useBookStore();
+const store = useRecipeStore();
 const authStore = useAuthStore();
 const uiStore = useUiStore();
+const router = useRouter();
+const route = useRoute();
 const isNotificationsOpen = ref(false);
 
 const searchInputRef = ref<HTMLInputElement | null>(null);
@@ -26,6 +29,13 @@ watch([Meta_K, Ctrl_K], ([meta, ctrl]) => {
     searchInputRef.value?.focus();
   }
 });
+
+// Navigate home if searching from other views
+watch(() => store.searchQuery, (newQuery) => {
+  if (newQuery.trim() && route.path !== '/') {
+    router.push('/');
+  }
+});
 </script>
 
 <template>
@@ -39,7 +49,9 @@ watch([Meta_K, Ctrl_K], ([meta, ctrl]) => {
       >
         <Menu class="h-6 w-6" />
       </button>
-      <h1 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white whitespace-nowrap">Dashboard</h1>
+      <h1 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white whitespace-nowrap">
+        {{ route.path === '/analytics' ? 'Analytics' : route.path === '/members' ? 'Community' : 'Recipes' }}
+      </h1>
     </div>
 
     <!-- Center Section: Search Bar -->
@@ -51,7 +63,7 @@ watch([Meta_K, Ctrl_K], ([meta, ctrl]) => {
         ref="searchInputRef"
         v-model="store.searchQuery"
         type="text"
-        placeholder="Search books..."
+        placeholder="Search recipes, ingredients, or cuisines..."
         class="block w-full pl-9 md:pl-10 pr-3 py-2 md:py-2.5 border border-slate-200 dark:border-[#2a2a2a] rounded-xl text-sm leading-5 bg-white/60 dark:bg-[#0f0f0f] dark:text-[#aaaaaa] placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:bg-white dark:focus:bg-[#0f0f0f] focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all duration-300 shadow-sm"
       />
       <!-- Keyboard Shortcut Hint (Desktop Only) -->

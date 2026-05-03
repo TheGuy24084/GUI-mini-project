@@ -1,30 +1,30 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { Book, BookmarkCheck, LayoutGrid } from 'lucide-vue-next';
-import { useBookStore } from '../store/bookStore';
+import { Utensils, Heart, Globe, LayoutGrid } from 'lucide-vue-next';
+import { useRecipeStore } from '../store/recipeStore';
 
-const store = useBookStore();
+const store = useRecipeStore();
 const stats = computed(() => store.stats);
 
 const statCards = computed(() => [
   {
-    label: 'Total Books',
+    label: 'Total Recipes',
     value: stats.value.total,
     icon: LayoutGrid,
     color: 'text-blue-600 dark:text-blue-400',
     bg: 'bg-blue-50 dark:bg-blue-500/10'
   },
   {
-    label: 'Currently Borrowed',
-    value: stats.value.borrowed,
-    icon: BookmarkCheck,
-    color: 'text-amber-600 dark:text-amber-400',
-    bg: 'bg-amber-50 dark:bg-amber-500/10'
+    label: 'Favorited',
+    value: stats.value.favorited,
+    icon: Heart,
+    color: 'text-rose-600 dark:text-rose-400',
+    bg: 'bg-rose-50 dark:bg-rose-500/10'
   },
   {
-    label: 'Available Now',
-    value: stats.value.available,
-    icon: Book,
+    label: 'World Cuisines',
+    value: stats.value.cuisines,
+    icon: Globe,
     color: 'text-emerald-600 dark:text-emerald-400',
     bg: 'bg-emerald-50 dark:bg-emerald-500/10'
   }

@@ -17,21 +17,21 @@ export class GeminiAIService {
   }
 
   /**
-   * Generates a concise, 2-sentence summary of a book.
+   * Generates a concise, 2-sentence summary of a recipe.
    */
-  async generateSummary(title: string, author: string): Promise<string> {
+  async generateSummary(name: string, cuisine: string): Promise<string> {
     if (!import.meta.env.VITE_GEMINI_API_KEY) {
       // Mock for demo
-      return `"${title}" by ${author} is a masterful exploration of its themes, blending intricate character development with a compelling narrative. It remains a seminal work that continues to influence readers and writers alike with its profound insights.`;
+      return `"${name}" is a signature ${cuisine} dish that balances traditional flavors with modern culinary techniques. It offers a unique sensory experience, making it a favorite for both casual meals and special occasions.`;
     }
 
     try {
       const model = this.genAI.getGenerativeModel({ 
         model: this.modelName,
-        systemInstruction: 'You are a professional librarian. Provide a concise, 2-sentence summary of this book.'
+        systemInstruction: 'You are a professional Executive Chef. Provide a concise, 2-sentence description of this recipe.'
       });
 
-      const prompt = `Title: ${title}\nAuthor: ${author}\n\nPlease provide a 2-sentence summary.`;
+      const prompt = `Recipe: ${name}\nCuisine: ${cuisine}\n\nPlease provide a 2-sentence summary.`;
       const result = await model.generateContent(prompt);
       const response = await result.response;
       return response.text().trim();
@@ -42,17 +42,17 @@ export class GeminiAIService {
   }
 
   /**
-   * Suggests 3 relevant tags for a book based on metadata.
+   * Suggests 3 relevant tags for a recipe based on metadata.
    */
-  async suggestTags(title: string, author: string, category: string): Promise<string[]> {
+  async suggestTags(name: string, cuisine: string, difficulty: string): Promise<string[]> {
     if (!import.meta.env.VITE_GEMINI_API_KEY) {
       // Mock for demo
-      return ['Classic', 'Must-Read', 'Thought-Provoking'];
+      return ['Healthy', 'Quick', 'Authentic'];
     }
 
     try {
       const model = this.genAI.getGenerativeModel({ model: this.modelName });
-      const prompt = `Based on the book "${title}" by ${author} in the category "${category}", suggest exactly 3 short tags (e.g., "Classic", "Must-read"). Return ONLY the tags separated by commas.`;
+      const prompt = `Based on the recipe "${name}" (${cuisine}) with difficulty "${difficulty}", suggest exactly 3 short culinary tags (e.g., "Spicy", "Vegetarian", "Dinner"). Return ONLY the tags separated by commas.`;
       
       const result = await model.generateContent(prompt);
       const response = await result.response;
@@ -66,21 +66,21 @@ export class GeminiAIService {
   }
 
   /**
-   * Generates a 2-sentence summary of the library's data using Gemini 3 Pro.
+   * Generates a 2-sentence summary of the culinary data using Gemini 3 Pro.
    */
-  async generateAnalyticsSummary(stats: any, categories: string[]): Promise<string> {
+  async generateAnalyticsSummary(stats: any, cuisines: string[]): Promise<string> {
     if (!import.meta.env.VITE_GEMINI_API_KEY) {
       // Mock for demo
-      return "Most of your collection is distributed across various categories. The availability rate remains high with a few books currently borrowed.";
+      return "Your recipe collection features a wide variety of global flavors. With a healthy ratio of favorites, you are well-equipped for any culinary occasion.";
     }
 
     try {
       const model = this.genAI.getGenerativeModel({ 
         model: 'gemini-3-pro',
-        systemInstruction: 'You are an expert Data Analyst and Librarian. Provide a concise, maximum 2-sentence summary of the library data.'
+        systemInstruction: 'You are an expert Culinary Data Analyst. Provide a concise, maximum 2-sentence summary of the recipe collection data.'
       });
 
-      const prompt = `Library Data Snapshot:\n- Total Books: ${stats.total}\n- Available: ${stats.available}\n- Borrowed: ${stats.borrowed}\n- Categories present: ${categories.join(', ')}\n\nProvide a 2-sentence summary emphasizing the distribution and what it says about the collection.`;
+      const prompt = `Culinary Data Snapshot:\n- Total Recipes: ${stats.total}\n- Favorites: ${stats.favorited}\n- Unique Cuisines: ${stats.cuisines}\n- Cuisines present: ${cuisines.join(', ')}\n\nProvide a 2-sentence summary emphasizing the culinary diversity and engagement.`;
       const result = await model.generateContent(prompt);
       const response = await result.response;
       return response.text().trim();

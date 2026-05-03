@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { useBookStore } from '../store/bookStore';
-import BookCard from './BookCard.vue';
+import { useRecipeStore } from '../store/recipeStore';
+import RecipeCard from './RecipeCard.vue';
 import EmptyState from './EmptyState.vue';
 
-const store = useBookStore();
+const store = useRecipeStore();
 </script>
 
 <template>
   <div class="w-full">
     <TransitionGroup 
-      v-if="store.filteredBooks.length > 0" 
+      v-if="store.filteredRecipes.length > 0" 
       name="list" 
       tag="div" 
       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative"
     >
-      <BookCard
-        v-for="book in store.filteredBooks"
-        :key="book.id"
-        :book="book"
+      <RecipeCard
+        v-for="recipe in store.filteredRecipes"
+        :key="recipe.id"
+        :recipe="recipe"
       />
     </TransitionGroup>
     <div v-else>

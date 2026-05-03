@@ -41,7 +41,7 @@ const emit = defineEmits<{
       <!-- Global Mobile-Only Sticky Header -->
       <MobileHeader />
       
-      <div class="flex-1 overflow-y-auto w-full">
+      <div class="flex-1 overflow-y-auto w-full relative">
         <slot></slot>
       </div>
     </main>

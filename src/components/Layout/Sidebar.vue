@@ -2,36 +2,44 @@
 import { computed } from 'vue';
 import { 
   LayoutDashboard, 
-  Library, 
+  Utensils, 
   Settings, 
   LogOut,
   LogIn, 
-  Layers,
+  ChefHat,
   FilterX,
   PieChart,
   Users,
-  X
+  X,
+  Globe
 } from 'lucide-vue-next';
-import { useBookStore } from '../../store/bookStore';
-import { useRoute } from 'vue-router';
+import { useRecipeStore } from '../../store/recipeStore';
+import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '../../store/authStore';
 import { useUiStore } from '../../store/uiStore';
 import UserAvatar from '../UserAvatar.vue';
 
-const store = useBookStore();
+const store = useRecipeStore();
 const authStore = useAuthStore();
 const uiStore = useUiStore();
 const route = useRoute();
+const router = useRouter();
 
 const emit = defineEmits<{
   (e: 'open-settings'): void
 }>();
 
-const categories = computed(() => store.categories);
-const activeCategory = computed(() => store.selectedCategory);
+const cuisines = computed(() => store.cuisines);
+const activeCuisine = computed(() => store.selectedCuisine);
 
-function selectCategory(category: string | null) {
-  store.setCategory(category);
+function selectCuisine(cuisine: string | null) {
+  store.setCuisine(cuisine);
+  
+  // If we are not on the home page, navigate back to it to show the filtered results
+  if (route.path !== '/') {
+    router.push('/');
+  }
+  
   // Close sidebar on mobile after selection
   if (window.innerWidth < 768) {
     uiStore.isSidebarOpen = false;
@@ -60,28 +68,26 @@ function selectCategory(category: string | null) {
       <!-- Brand -->
       <div class="flex items-center gap-3 px-2 mb-10 overflow-hidden">
         <div class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/30">
-          <Library :size="20" stroke-width="2.5" />
+          <Utensils :size="20" stroke-width="2.5" />
         </div>
-        <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white" :class="uiStore.isSidebarOpen ? 'block' : 'hidden lg:block'">SmartLib<span class="text-emerald-500">.</span></span>
+        <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white" :class="uiStore.isSidebarOpen ? 'block' : 'hidden lg:block'">Culinara<span class="text-emerald-500">.</span></span>
       </div>
 
       <!-- Main Navigation -->
       <div class="mb-8">
-        <p class="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 transition-opacity duration-300" :class="uiStore.isSidebarOpen ? 'opacity-100' : 'opacity-0 h-0 md:h-auto overflow-hidden lg:opacity-100 lg:h-auto'">Menu</p>
+        <p class="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 transition-opacity duration-300" :class="uiStore.isSidebarOpen ? 'opacity-100' : 'opacity-0 h-0 md:h-auto overflow-hidden lg:opacity-100 lg:h-auto'">Kitchen</p>
         <nav class="space-y-1">
           <router-link 
             to="/"
-            @click="selectCategory(null)"
             class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium group"
-            :class="route.path === '/' && !activeCategory ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 dark:text-[#aaaaaa] dark:hover:bg-[#2a2a2a] dark:hover:text-white'"
+            :class="route.path === '/' && !activeCuisine ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 dark:text-[#aaaaaa] dark:hover:bg-[#2a2a2a] dark:hover:text-white'"
           >
-            <LayoutDashboard :size="20" :class="route.path === '/' && !activeCategory ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'" />
-            <span class="truncate" :class="uiStore.isSidebarOpen ? 'block' : 'hidden lg:block'">Dashboard</span>
+            <LayoutDashboard :size="20" :class="route.path === '/' && !activeCuisine ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'" />
+            <span class="truncate" :class="uiStore.isSidebarOpen ? 'block' : 'hidden lg:block'">Recipes</span>
           </router-link>
           
           <router-link 
             to="/analytics"
-            @click="selectCategory(null)"
             class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium group mt-1"
             :class="route.path === '/analytics' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 dark:text-[#aaaaaa] dark:hover:bg-[#2a2a2a] dark:hover:text-white'"
           >
@@ -91,22 +97,22 @@ function selectCategory(category: string | null) {
 
           <router-link 
             to="/members"
-            @click="selectCategory(null)"
             class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium group mt-1"
             :class="route.path === '/members' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 dark:text-[#aaaaaa] dark:hover:bg-[#2a2a2a] dark:hover:text-white'"
           >
-            <Users :size="20" :class="route.path === '/members' ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'" />
-            <span class="truncate" :class="uiStore.isSidebarOpen ? 'block' : 'hidden lg:block'">Members</span>
+            <ChefHat :size="20" :class="route.path === '/members' ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'" />
+            <span class="truncate" :class="uiStore.isSidebarOpen ? 'block' : 'hidden lg:block'">Community</span>
           </router-link>
         </nav>
       </div>
 
-      <!-- Dynamic Categories -->
-      <div class="mb-4">
-          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Categories</p>
+      <!-- Dynamic Cuisines -->
+      <div class="mb-4 flex flex-col min-h-0">
+        <div class="flex items-center justify-between px-4 mb-4 flex-shrink-0">
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Cuisines</p>
           <button 
-            v-if="activeCategory"
-            @click="selectCategory(null)"
+            v-if="activeCuisine"
+            @click="selectCuisine(null)"
             class="text-[10px] flex items-center gap-1 text-emerald-600 hover:text-emerald-700 font-bold transition-colors"
           >
             <FilterX :size="12" />
@@ -114,21 +120,22 @@ function selectCategory(category: string | null) {
           </button>
         </div>
         
-        <nav class="space-y-1">
+        <nav class="space-y-1 overflow-y-auto max-h-[40vh] pr-2 custom-scrollbar">
           <button 
-            v-for="category in categories" 
-            :key="category"
-            @click="selectCategory(category)"
+            v-for="cuisine in cuisines.filter(c => !!c)" 
+            :key="cuisine"
+            @click="selectCuisine(cuisine)"
             class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium text-left group border-l-4 border-transparent"
-            :class="activeCategory === category 
+            :class="activeCuisine === cuisine 
               ? 'bg-slate-800 text-white border-emerald-500 shadow-sm' 
               : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 dark:text-[#aaaaaa] dark:hover:bg-[#2a2a2a] dark:hover:text-white'"
           >
-            <Layers :size="18" :class="activeCategory === category ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'" />
-            <span class="truncate" :class="uiStore.isSidebarOpen ? 'block' : 'hidden lg:block'">{{ category }}</span>
+            <Globe :size="18" :class="activeCuisine === cuisine ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'" />
+            <span class="truncate" :class="uiStore.isSidebarOpen ? 'block' : 'hidden lg:block'">{{ cuisine }}</span>
           </button>
         </nav>
       </div>
+    </div>
 
     <!-- Bottom Actions -->
     <div class="space-y-4 p-6 border-t border-slate-200/50 flex-shrink-0">
@@ -141,7 +148,7 @@ function selectCategory(category: string | null) {
         />
         <div class="flex flex-col overflow-hidden transition-all duration-300" :class="uiStore.isSidebarOpen ? 'opacity-100 w-auto' : 'opacity-0 w-0 h-0 md:h-auto md:w-0 lg:opacity-100 lg:w-auto'">
           <span class="text-sm font-semibold text-slate-900 dark:text-white truncate" :title="authStore.user?.name">{{ authStore.user?.name }}</span>
-          <span class="text-[10px] text-slate-500 dark:text-[#aaaaaa] truncate uppercase tracking-wider">Member</span>
+          <span class="text-[10px] text-slate-500 dark:text-[#aaaaaa] truncate uppercase tracking-wider">Chef</span>
         </div>
       </div>
 

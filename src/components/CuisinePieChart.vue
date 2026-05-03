@@ -1,31 +1,31 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useBookStore } from '../store/bookStore';
+import { useRecipeStore } from '../store/recipeStore';
 import { Pie } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
-const store = useBookStore();
+const store = useRecipeStore();
 
 const chartData = computed(() => {
-  const books = store.books;
-  const categoryCounts: Record<string, number> = {};
+  const recipes = store.recipes;
+  const cuisineCounts: Record<string, number> = {};
   
-  books.forEach(book => {
-    if (categoryCounts[book.category]) {
-      categoryCounts[book.category]++;
+  recipes.forEach(recipe => {
+    if (cuisineCounts[recipe.cuisine]) {
+      cuisineCounts[recipe.cuisine]++;
     } else {
-      categoryCounts[book.category] = 1;
+      cuisineCounts[recipe.cuisine] = 1;
     }
   });
 
   return {
-    labels: Object.keys(categoryCounts),
+    labels: Object.keys(cuisineCounts),
     datasets: [
       {
-        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6'],
-        data: Object.values(categoryCounts)
+        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316', '#06b6d4'],
+        data: Object.values(cuisineCounts)
       }
     ]
   };
@@ -37,6 +37,13 @@ const chartOptions = {
   plugins: {
     legend: {
       position: 'bottom' as const,
+      labels: {
+        usePointStyle: true,
+        padding: 20,
+        font: {
+          size: 11
+        }
+      }
     }
   }
 };

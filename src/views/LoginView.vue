@@ -28,7 +28,7 @@ function handleLogin() {
         <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/30 mb-4">
           <Library :size="24" stroke-width="2.5" />
         </div>
-        <h1 class="text-2xl font-bold tracking-tight">Welcome to SmartLib<span class="text-emerald-500">.</span></h1>
+        <h1 class="text-2xl font-bold tracking-tight">Welcome to Culinara<span class="text-emerald-500">.</span></h1>
         <p class="text-slate-400 text-sm mt-1">Please sign in to your dashboard</p>
       </div>
 

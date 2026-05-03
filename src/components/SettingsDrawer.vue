@@ -3,7 +3,7 @@ import { ref, watch, computed, onUnmounted } from 'vue';
 import { useAuthStore } from '../store/authStore';
 import { useUiStore } from '../store/uiStore';
 import { useToast } from '../composables/useToast';
-import { Sun, Moon, User, Settings, X, AlignJustify, Sparkles, Camera, ImagePlus } from 'lucide-vue-next';
+import { Sun, Moon, User, Settings, X, AlignJustify, Sparkles, Camera } from 'lucide-vue-next';
 import UserAvatar from './UserAvatar.vue';
 
 const emit = defineEmits<{
@@ -46,26 +46,22 @@ function handleFileUpload(e: Event) {
   
   if (file.size > 2 * 1024 * 1024) {
     showToast('Image size must be under 2MB', 'error');
-    // Reset file input so same file can be re-selected
     if (fileInputRef.value) fileInputRef.value.value = '';
     return;
   }
   
   isUploading.value = true;
   
-  // Revoke previous object URL to prevent memory leaks
   if (previewImage.value) {
     URL.revokeObjectURL(previewImage.value);
   }
   
-  // Create an instant UI preview
   previewImage.value = URL.createObjectURL(file);
   
   const reader = new FileReader();
   reader.onload = () => {
     authStore.updateProfilePicture(reader.result as string);
     isUploading.value = false;
-    // Clear preview since authStore now has the Base64 version
     if (previewImage.value) {
       URL.revokeObjectURL(previewImage.value);
       previewImage.value = null;
@@ -73,11 +69,9 @@ function handleFileUpload(e: Event) {
   };
   reader.readAsDataURL(file);
   
-  // Reset file input so re-selecting same file triggers change event
   if (fileInputRef.value) fileInputRef.value.value = '';
 }
 
-// Cleanup object URLs on unmount
 onUnmounted(() => {
   if (previewImage.value) {
     URL.revokeObjectURL(previewImage.value);
@@ -124,10 +118,9 @@ function clearData() {
                   <div class="bg-emerald-100 dark:bg-emerald-900/40 p-2 rounded-xl text-emerald-600 dark:text-emerald-400">
                     <Settings class="h-5 w-5" />
                   </div>
-                  <h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Settings</h2>
+                  <h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Kitchen Settings</h2>
                 </div>
                 <button @click="emit('close')" class="rounded-full p-2 text-slate-400 hover:text-slate-500 hover:bg-slate-100 dark:hover:bg-[#2a2a2a] transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                  <span class="sr-only">Close panel</span>
                   <X class="h-6 w-6" />
                 </button>
               </div>
@@ -137,32 +130,28 @@ function clearData() {
                 
                 <!-- Display Profile -->
                 <div v-if="authStore.isAuthenticated">
-                  <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2"><User class="w-4 h-4" /> Personalization</h3>
+                  <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2"><User class="w-4 h-4" /> Chef Identity</h3>
                   <div class="space-y-4 bg-slate-50 dark:bg-[#0f0f0f]/50 p-4 rounded-2xl border border-slate-100 dark:border-[#2a2a2a]">
                     <div class="flex flex-col items-center py-4 relative">
                       <div class="relative group cursor-pointer" @click="fileInputRef?.click()">
-                        <!-- Profile Image / Falling back to UserAvatar component -->
                         <UserAvatar 
-                          :user="{ name: authStore.user?.name || 'Guest', profilePic: currentPreviewImage || undefined }"
+                          :user="{ name: authStore.user?.name || 'Chef', profilePic: currentPreviewImage || undefined }"
                           size="w-24 h-24 border-4 border-emerald-100 dark:border-emerald-900/40 shadow-xl ring-4 ring-emerald-500/20 transition-all duration-300 group-hover:scale-105 group-hover:ring-emerald-500/40"
                         />
-                        <!-- Hover Overlay -->
                         <div class="absolute inset-0 bg-black/40 rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
                           <Camera class="w-6 h-6 text-white mb-0.5" />
-                          <span class="text-[10px] text-white/90 font-medium">Edit</span>
+                          <span class="text-[10px] text-white/90 font-medium">Update</span>
                         </div>
-                        <!-- Uploading Spinner Overlay -->
                         <div v-if="isUploading" class="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
                           <div class="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
                         </div>
                         <input type="file" ref="fileInputRef" accept="image/*" class="hidden" @change="handleFileUpload" />
                       </div>
-                      <span class="text-xs text-slate-400 dark:text-slate-500 mt-3 font-medium uppercase tracking-wider">Click to update</span>
-                      <span class="text-[10px] text-slate-300 dark:text-slate-600 mt-0.5">Max 2MB · JPG, PNG, WebP</span>
+                      <span class="text-xs text-slate-400 dark:text-slate-500 mt-3 font-medium uppercase tracking-wider">Chef Avatar</span>
                     </div>
 
                     <div class="pt-2 border-t border-slate-200 dark:border-slate-800">
-                      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Display Name</label>
+                      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Chef Name</label>
                       <div class="flex gap-2">
                         <input
                           v-model="profileName"
@@ -177,23 +166,16 @@ function clearData() {
 
                 <!-- Appearance options -->
                 <div>
-                  <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2"><Sun class="w-4 h-4" /> Appearance</h3>
+                  <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2"><Sun class="w-4 h-4" /> Atmosphere</h3>
                   
                   <div class="space-y-4">
                     <div class="flex items-center justify-between bg-slate-50 dark:bg-[#0f0f0f]/50 p-4 rounded-2xl border border-slate-100 dark:border-[#2a2a2a]">
                       <div>
                         <h4 class="font-medium text-slate-900 dark:text-slate-100">Dark Mode</h4>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Switch to a darker theme</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Late night cooking vibes</p>
                       </div>
-                      <button 
-                        @click="uiStore.toggleDark()" 
-                        class="w-12 h-6 rounded-full transition-colors relative focus:outline-none"
-                        :class="uiStore.isDark ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'"
-                      >
-                        <span 
-                          class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform flex items-center justify-center shadow-sm"
-                          :class="uiStore.isDark ? 'translate-x-6' : 'translate-x-0'"
-                        >
+                      <button @click="uiStore.toggleDark()" class="w-12 h-6 rounded-full transition-colors relative focus:outline-none" :class="uiStore.isDark ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'">
+                        <span class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform flex items-center justify-center shadow-sm" :class="uiStore.isDark ? 'translate-x-6' : 'translate-x-0'">
                           <Moon v-if="uiStore.isDark" class="w-2.5 h-2.5 text-emerald-500" />
                           <Sun v-else class="w-2.5 h-2.5 text-slate-400" />
                         </span>
@@ -202,18 +184,11 @@ function clearData() {
 
                     <div class="flex items-center justify-between bg-slate-50 dark:bg-[#0f0f0f]/50 p-4 rounded-2xl border border-slate-100 dark:border-[#2a2a2a]">
                       <div>
-                        <h4 class="font-medium text-slate-900 dark:text-slate-100">Compact Book Cards</h4>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Decrease grid spacing and padding</p>
+                        <h4 class="font-medium text-slate-900 dark:text-slate-100">Compact Recipe Cards</h4>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Fit more dishes on one screen</p>
                       </div>
-                      <button 
-                        @click="uiStore.compactMode = !uiStore.compactMode" 
-                        class="w-12 h-6 rounded-full transition-colors relative focus:outline-none"
-                        :class="uiStore.compactMode ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'"
-                      >
-                        <span 
-                          class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform flex items-center justify-center shadow-sm"
-                          :class="uiStore.compactMode ? 'translate-x-6' : 'translate-x-0'"
-                        >
+                      <button @click="uiStore.compactMode = !uiStore.compactMode" class="w-12 h-6 rounded-full transition-colors relative focus:outline-none" :class="uiStore.compactMode ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'">
+                        <span class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform flex items-center justify-center shadow-sm" :class="uiStore.compactMode ? 'translate-x-6' : 'translate-x-0'">
                           <AlignJustify v-if="uiStore.compactMode" class="w-2.5 h-2.5 text-emerald-500" />
                         </span>
                       </button>
@@ -221,18 +196,11 @@ function clearData() {
 
                     <div class="flex items-center justify-between bg-slate-50 dark:bg-[#0f0f0f]/50 p-4 rounded-2xl border border-slate-100 dark:border-[#2a2a2a]">
                       <div>
-                        <h4 class="font-medium text-slate-900 dark:text-slate-100">Show AI Insights</h4>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Display Gemini summaries on cards</p>
+                        <h4 class="font-medium text-slate-900 dark:text-slate-100">Show Recipe Insights</h4>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Display AI culinary summaries</p>
                       </div>
-                      <button 
-                        @click="uiStore.enableAiInsights = !uiStore.enableAiInsights" 
-                        class="w-12 h-6 rounded-full transition-colors relative focus:outline-none"
-                        :class="uiStore.enableAiInsights ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'"
-                      >
-                        <span 
-                          class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform flex items-center justify-center shadow-sm"
-                          :class="uiStore.enableAiInsights ? 'translate-x-6' : 'translate-x-0'"
-                        >
+                      <button @click="uiStore.enableAiInsights = !uiStore.enableAiInsights" class="w-12 h-6 rounded-full transition-colors relative focus:outline-none" :class="uiStore.enableAiInsights ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'">
+                        <span class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform flex items-center justify-center shadow-sm" :class="uiStore.enableAiInsights ? 'translate-x-6' : 'translate-x-0'">
                           <Sparkles v-if="uiStore.enableAiInsights" class="w-2.5 h-2.5 text-emerald-500" />
                         </span>
                       </button>
@@ -246,26 +214,19 @@ function clearData() {
                   <div class="space-y-4">
                     <div class="flex items-center justify-between bg-slate-50 dark:bg-[#0f0f0f]/50 p-4 rounded-2xl border border-slate-100 dark:border-[#2a2a2a]">
                       <div>
-                        <h4 class="font-medium text-slate-900 dark:text-slate-100">Clear Local Data</h4>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Reset all application preferences and data</p>
+                        <h4 class="font-medium text-slate-900 dark:text-slate-100">Reset Culinara</h4>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Clear all recipes and preferences</p>
                       </div>
-                      <button 
-                        @click="clearData" 
-                        class="px-4 py-2 bg-rose-100 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-xl font-medium transition-colors hover:bg-rose-200 dark:hover:bg-rose-500/20 focus:outline-none"
-                      >
-                        Reset Data
-                      </button>
+                      <button @click="clearData" class="px-4 py-2 bg-rose-100 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-xl font-medium transition-colors hover:bg-rose-200 dark:hover:bg-rose-500/20 focus:outline-none">Reset</button>
                     </div>
                   </div>
                 </div>
 
               </div>
-              
             </div>
           </div>
         </Transition>
       </div>
-
     </div>
   </Teleport>
 </template>

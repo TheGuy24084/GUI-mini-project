@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import MainLayout from './components/Layout/MainLayout.vue';
 import ToastNotification from './components/ToastNotification.vue';
-import BookDetailSheet from './components/BookDetailSheet.vue';
+import RecipeDetailSheet from './components/RecipeDetailSheet.vue';
 import SettingsDrawer from './components/SettingsDrawer.vue';
 import AuthModal from './components/AuthModal.vue';
 import { useDark } from '@vueuse/core';
@@ -26,5 +26,5 @@ const showSettings = ref(false);
   <SettingsDrawer :is-open="showSettings" @close="showSettings = false" />
   <AuthModal />
   <ToastNotification />
-  <BookDetailSheet />
+  <RecipeDetailSheet />
 </template>

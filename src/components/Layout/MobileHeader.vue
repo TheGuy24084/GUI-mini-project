@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { Menu, Library } from 'lucide-vue-next';
+import { Menu, Utensils } from 'lucide-vue-next';
 import { useUiStore } from '../../store/uiStore';
-import { useBookStore } from '../../store/bookStore';
+import { useRecipeStore } from '../../store/recipeStore';
 import { useRouter } from 'vue-router';
 
 const uiStore = useUiStore();
-const bookStore = useBookStore();
+const recipeStore = useRecipeStore();
 const router = useRouter();
 
 function goHome() {
-  bookStore.setCategory(null);
+  recipeStore.setCuisine(null);
   router.push('/');
 }
 </script>
@@ -31,9 +31,9 @@ function goHome() {
       class="flex items-center gap-2 group focus:outline-none"
     >
       <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500 text-white shadow-md shadow-emerald-500/30 group-active:scale-95 transition-transform">
-        <Library :size="16" stroke-width="2.5" />
+        <Utensils :size="16" stroke-width="2.5" />
       </div>
-      <span class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">SmartLib<span class="text-emerald-500">.</span></span>
+      <span class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Culinara<span class="text-emerald-500">.</span></span>
     </button>
 
     <!-- Right: Spacer (For Balance) -->
