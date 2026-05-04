@@ -1,0 +1,24 @@
+The aim 01: Integrate DummyJSON.com API into SmartLib OS
+Actual prompt: Have you followed this
+
+The aim 02: Pivot the application from a Library OS to a Recipe Book.
+Actual prompt: Let's go with that recipe way of dummy json
+
+The aim 03: Fix UI issues and update admin credentials.
+Actual prompt: there are some issues with the ui
+And change the admin credential
+
+The aim 04: Resolve sidebar visibility issues.
+Actual prompt: still the cuisins filter bar is not fully visible please resolve it and show me the end result
+
+The aim 05: Fix broken functions in Analytics and Community views.
+Actual prompt: While in the analytics and community when I click other functions there are not working
+
+The aim 06: Fix navigation issues from the Analytics view.
+Actual prompt: still the problem is there , when at /analytics router when I clicked any other path like resipies it doesn't go to that view
+
+The aim 07: Fix logo not changing on login page.
+Actual prompt: the logo didn't changed
+
+The aim 08: Commit all changes to GitHub.
+Actual prompt: commit all to git hub
