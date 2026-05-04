@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../store/authStore';
-import { Library } from 'lucide-vue-next';
+import { Utensils } from 'lucide-vue-next';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -26,7 +26,7 @@ function handleLogin() {
       
       <div class="flex flex-col items-center mb-8">
         <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/30 mb-4">
-          <Library :size="24" stroke-width="2.5" />
+          <Utensils :size="24" stroke-width="2.5" />
         </div>
         <h1 class="text-2xl font-bold tracking-tight">Welcome to Culinara<span class="text-emerald-500">.</span></h1>
         <p class="text-slate-400 text-sm mt-1">Please sign in to your dashboard</p>
@@ -39,7 +39,7 @@ function handleLogin() {
             id="email"
             v-model="username" 
             type="email" 
-            placeholder="admin@library.com"
+            placeholder="admin@culinara.com"
             class="w-full px-4 py-3 rounded-xl bg-slate-900/50 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all"
             required
           />
